@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('tahun_periode_id')->constrained('tahun_periodes');
             $table->foreignId('lembaga_akreditasi_id')->constrained('lembaga_akreditasis');
-            $table->string('nama_standar_mutu');
-            $table->string('deskripsi')->nullable();
+            $table->text('nama_standar_mutu');
+            $table->text('deskripsi')->nullable();
             $table->timestamps();
         });
     }

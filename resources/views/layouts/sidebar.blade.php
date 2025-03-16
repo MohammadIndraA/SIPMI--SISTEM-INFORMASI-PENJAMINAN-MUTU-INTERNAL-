@@ -157,4 +157,13 @@
             </ul>
         </div>
     </li>
+
+
+    <li class="side-nav-item mt-4 mb-5">
+        <hr>
+        <a href="/logout" class="side-nav-link">
+            <i class="dripicons-user-group"></i>
+            <span> Logout </span>
+        </a>
+    </li>
 </ul>

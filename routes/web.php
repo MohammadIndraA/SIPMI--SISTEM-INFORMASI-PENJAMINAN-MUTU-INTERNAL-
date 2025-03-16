@@ -15,6 +15,7 @@ use App\Http\Controllers\ManajemenAuditorController;
 use App\Http\Controllers\ManajemenDokumenController;
 use App\Http\Controllers\PengaturanPeriodeController;
 use App\Http\Controllers\PermissionController;
+use App\Http\Controllers\PoinController;
 use App\Http\Controllers\RekapDeskEvaluasiController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\StandarNasionalController;
@@ -129,11 +130,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/rekap-desk-evaluasis', [RekapDeskEvaluasiController::class, 'index'])->name('rekap-desk-evaluasi.index');
     
     // Daftar Standar Mutu
-    Route::get('/daftar-standar-mutus', [DaftarStandarMutuController::class, 'index'])->name('daftar-standar-mutu.index');
-    Route::post('/daftar-standar-mutu-store', [DaftarStandarMutuController::class, 'store'])->name('daftar-standar-mutu.store');
-    Route::get('/daftar-standar-mutu-edit', [DaftarStandarMutuController::class, 'edit'])->name('daftar-standar-mutu.edit');
-    Route::put('/daftar-standar-mutu-update/{id}', [DaftarStandarMutuController::class, 'update'])->name('daftar-standar-mutu.update');
-    Route::delete('/daftar-standar-mutu-delete', [DaftarStandarMutuController::class, 'destroy'])->name('daftar-standar-mutu.delete');
+    // Route::get('/daftar-standar-mutus', [DaftarStandarMutuController::class, 'index'])->name('daftar-standar-mutu.index');
+    // Route::post('/daftar-standar-mutu-store', [DaftarStandarMutuController::class, 'store'])->name('daftar-standar-mutu.store');
+    // Route::get('/daftar-standar-mutu-edit', [DaftarStandarMutuController::class, 'edit'])->name('daftar-standar-mutu.edit');
+    // Route::put('/daftar-standar-mutu-update/{id}', [DaftarStandarMutuController::class, 'update'])->name('daftar-standar-mutu.update');
+    // Route::delete('/daftar-standar-mutu-delete', [DaftarStandarMutuController::class, 'destroy'])->name('daftar-standar-mutu.delete');
     
     // Dftar Temuan
     Route::get('/daftar-temuans', [DaftarTemuanController::class, 'index'])->name('daftar-temuan.index');
@@ -163,6 +164,12 @@ Route::middleware('auth')->group(function () {
      Route::get('/daftar-sub-standar-edit', [DaftarSubStandarController::class, 'edit'])->name('daftar-sub-standar.edit');
      Route::put('/daftar-sub-standar-update/{id}', [DaftarSubStandarController::class, 'update'])->name('daftar-sub-standar.update');
      Route::delete('/daftar-sub-standar-delete', [DaftarSubStandarController::class, 'destroy'])->name('daftar-sub-standar.delete');
+   
+     // Daftar sub Standar
+     Route::post('/poin-store', [PoinController::class, 'store'])->name('poin.store');
+     Route::get('/poin-edit', [PoinController::class, 'edit'])->name('poin.edit');
+     Route::put('/poin-update/{id}', [PoinController::class, 'update'])->name('poin.update');
+     Route::delete('/poin-delete', [PoinController::class, 'destroy'])->name('poin.delete');
 
     // logout
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');

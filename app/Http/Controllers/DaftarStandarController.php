@@ -28,7 +28,7 @@ class DaftarStandarController extends Controller
         try {
             // Data sudah tervalidasi melalui PermissionRequest
             $data = $request->validated();
-            $data['daftar_standar_mutu_id'] = $request->id; 
+            $data['daftar_standar_mutu_id'] = $request->daftar_standar_mutu_id ?? $request->id; 
             $daftarStandar = DaftarStandar::create($data);
             return response()->json([
                 "status" => true,
@@ -47,7 +47,7 @@ class DaftarStandarController extends Controller
 
     public function edit(Request $request)
     {
-            $daftarStandar = DaftarStandar::findOrFail($request->id);
+            $daftarStandar = DaftarStandar::with('daftar_standar_mutu')->findOrFail($request->id);
         return response()->json([
             "status" => true,
             "data" => $daftarStandar,

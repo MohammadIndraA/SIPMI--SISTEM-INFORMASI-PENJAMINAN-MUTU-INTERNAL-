@@ -16,16 +16,16 @@ class DefaultUserSeeder extends Seeder
     {
           // Creating Super Admin User
           $superAdmin = User::create([
-            'name' => fake()->name(), 
-            'email' => fake()->email(),
+            'name' => 'Super Admin', 
+            'email' => 'superadmin@example.com',
             'password' => Hash::make('password')
         ]);
         $superAdmin->assignRole('Super Admin');
 
         // Creating Admin User
         $admin = User::create([
-            'name' => fake()->name(), 
-            'email' => fake()->email(),
+            'name' => 'Admin', 
+            'email' => 'admin@example.com',
             'password' => Hash::make('password')
         ]);
         $admin->assignRole('Admin');

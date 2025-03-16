@@ -26,13 +26,7 @@ class DaftarStandarMutuController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $daftarStandarMutu = DB::table('daftar_standar_mutus')
-            ->leftJoin('daftar_standars', 'daftar_standars.daftar_standar_mutu_id', '=', 'daftar_standar_mutus.id')
-            ->select(
-                'daftar_standar_mutus.*',
-                'daftar_standars.id as daftar_standar_id',
-                'daftar_standars.nama_standar'
-            )
+        $daftarStandarMutu = DaftarStandarMutu::with('daftar_standars.daftar_sub_standars.poins')
             ->orderBy('daftar_standar_mutus.id', 'desc')
             ->when($request->filled('tahun_periode_id'), function ($query) use ($request) {
                 $query->where('tahun_periode_id', $request->tahun_periode_id);
@@ -43,26 +37,49 @@ class DaftarStandarMutuController extends Controller
             return datatables($daftarStandarMutu)
                 ->addIndexColumn()
                 ->editColumn('nama_standar_mutu', function ($row) {
-                   $data = ' <details>
-                        <summary class="withJS">' . $row->nama_standar_mutu . '</summary>
-                        <details>
-                                <summary class="withJS p-3">'.  $row->nama_standar .'</summary>
-                                       <ul class="pe-5">
-                                       <li class="ms-3">
-                                        '.   $row->nama_standar_mutu .'
-                                       </li>
-                        </details>
-                    </details>';
+                    $data = '<details open>
+                                <summary style="margin: 0px;"><b>' . $row->nama_standar_mutu . '</b></summary>
+                               <hr/>';
+                
+                    if ($row->daftar_standars) {
+                        foreach ($row->daftar_standars as $daftar_standar) {
+                            // $data .= ' <hr/>';
+                            $data .= '<details open>
+                                        <summary class="ps-2 ms-1"><b>' . $daftar_standar->nama_standar . '</b><hr/></summary> ';
+                            
+                            // Periksa apakah daftar_standar memiliki daftar_sub_standars
+                            if ($daftar_standar->daftar_sub_standars && $daftar_standar->daftar_sub_standars->count() > 0) {
+                                foreach ($daftar_standar->daftar_sub_standars as $daftar_sub_standar) {
+                                    $data .= '<details open>
+                                                <summary class="ps-2 ms-3"><b>' . $daftar_sub_standar->nama_sub_standar . '</b><hr/></summary>
+                                              ';
+                                    if ($daftar_sub_standar->poins && $daftar_sub_standar->poins->count() > 0) {
+                                        $data .= '<ul class="ms-5 ps-2">'; // Buka <ul> di sini
+                                        foreach ($daftar_sub_standar->poins as $poin) {
+                                            $data .= '<li>'; // Buka <li> untuk setiap poin
+                                            $data .= '<p class="">' . $poin->nama_poin . '</p><hr>';
+                                            $data .= '</li>'; // Tutup <li> untuk setiap poin
+                                        }
+                                        $data .= '</ul>'; // Tutup <ul> di sini
+                                    }
+                                    $data .= '</details>';
+                                }
+                            }
+                
+                            $data .= '</details>';
+                        }
+                    }
+                    $data .= '</details>';
                     return $data;
-                })                
+                })             
                 ->addColumn('action', function ($row) {
                     $editButton = '';
                     $deleteButton = '';
                 
-                    // Tambahkan tombol edit jika memiliki izin
+                    //button add daftar menu standar
                     if (auth()->user()->can('edit-daftar-standar-mutu')) {
                         $addButton = '
-                            <button onclick="addStandar(`' . $row->id . '`)" class="btn btn-warning btn-flat btn-sm" title="Tambah Standar">
+                            <button onclick="addStandar(\'' . $row->id . '\', \'daftar-standar-mutu\')" class="btn btn-warning btn-flat btn-sm" title="Tambah Data">
                                 <i class="uil-comment-plus"></i>
                             </button>
                         ';
@@ -71,7 +88,7 @@ class DaftarStandarMutuController extends Controller
                     // Tambahkan tombol edit jika memiliki izin
                     if (auth()->user()->can('edit-daftar-standar-mutu')) {
                         $editButton = '
-                            <button onclick="editFunc(`' . $row->id . '`)" class="btn btn-primary btn-flat btn-sm" title="Edit">
+                            <button onclick="editFunc(`' . $row->id . '`, \'daftar-standar-mutu\')" class="btn btn-primary btn-flat btn-sm" title="Edit">
                                 <i class="dripicons-document-edit"></i>
                             </button>
                         ';
@@ -80,19 +97,59 @@ class DaftarStandarMutuController extends Controller
                     // Tambahkan tombol delete jika memiliki izin
                     if (auth()->user()->can('delete-daftar-standar-mutu')) {
                         $deleteButton = '
-                            <button onclick="deleteFunc(`' . $row->id . '`)" class="btn btn-danger btn-flat btn-sm" title="Delete">
+                            <button onclick="deleteFunc(`' . $row->id . '`, \'daftar-standar-mutu\')" class="btn btn-danger btn-flat btn-sm" title="Delete">
                                 <i class="dripicons-trash"></i>
                             </button>
                         ';
                     }
                 
                     // Gabungkan semua tombol dalam satu grup
+
+                   // button standar  // Tampilkan tombol aksi untuk daftar_standars dan daftar_sub_standars
+        $buttons = '';
+
+        if ($row->daftar_standars) {
+            foreach ($row->daftar_standars as $daftar_standar) {
+                // Tombol untuk daftar_standar
+                $buttons .= '
+                <div class="btn-group mb-3">
+                    ' . generateAddButton($daftar_standar->id, 'Tambah Standar', 'daftar-standar', 'btn-warning', 'uil-comment-plus') . '
+                    ' . generateEditButton($daftar_standar->id, 'Edit Standar', 'daftar-standar', 'btn-primary', 'dripicons-document-edit') . '
+                    ' . deleteButton($daftar_standar->id, 'Hapus Standar', 'daftar-standar', 'btn-danger', 'dripicons-trash') . '
+                </div>';
+
+                // Tombol untuk daftar_sub_standar (jika ada)
+                if ($daftar_standar->relationLoaded('daftar_sub_standars') && $daftar_standar->daftar_sub_standars->count() > 0) {
+                    foreach ($daftar_standar->daftar_sub_standars as $daftar_sub_standar) {
+                        $buttons .= '
+                        <div class="btn-group mb-3">
+                            ' . generateAddButton($daftar_sub_standar->id, 'Tambah Sub Standar', 'daftar-sub-standar', 'btn-warning', 'dripicons-plus') . '
+                            ' . generateEditButton($daftar_sub_standar->id, 'Edit Sub Standar', 'daftar-sub-standar', 'btn-primary', 'dripicons-pencil') . '
+                            ' . deleteButton($daftar_sub_standar->id, 'Hapus Sub Standar', 'daftar-sub-standar', 'btn-danger', 'dripicons-cross') . '
+                        </div>';
+
+                        // Tombol untuk poin (jika ada)
+                        if ($daftar_sub_standar->relationLoaded('poins') && $daftar_sub_standar->poins->count() > 0) {
+                            foreach ($daftar_sub_standar->poins as $poin) {
+                                $buttons .= '
+                                 <div class="btn-group pt-2 mb-3">
+                            ' . generateEditButton($poin->id, 'Edit Sub Standar', 'poin', 'btn-primary', 'dripicons-pencil') . '
+                            ' . deleteButton($poin->id, 'Hapus Sub Standar', 'poin', 'btn-danger', 'dripicons-cross') . '
+                        </div>';
+                            }
+                        }
+                    }
+                }
+            }
+        }
+                    
                     return '
                         <div class="btn-group">
                             ' . $addButton . '
                             ' . $editButton . '
                             ' . $deleteButton . '
-                        </div>
+                        </div> 
+                        . ' . $buttons . '.
                     ';
                 })
                 ->rawColumns(['action','nama_standar_mutu'])

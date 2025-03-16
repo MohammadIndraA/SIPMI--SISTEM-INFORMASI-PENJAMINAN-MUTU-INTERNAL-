@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('daftar_standars', function (Blueprint $table) {
             $table->id();
             $table->foreignId('daftar_standar_mutu_id')->constrained('daftar_standar_mutus');
-            $table->string('nama_standar');
-            $table->string('deskripsi')->nullable();
+            $table->text('nama_standar');
+            $table->text('deskripsi')->nullable();
             $table->timestamps();
         });
     }

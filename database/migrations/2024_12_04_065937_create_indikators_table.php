@@ -11,12 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('daftar_sub_standars', function (Blueprint $table) {
+        Schema::create('indikators', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('daftar_standar_mutu_id')->constrained('daftar_standar_mutus');
-            $table->foreignId('daftar_standar_id')->constrained('daftar_standars');
-            $table->text('nama_sub_standar');
-            $table->text('deskripsi')->nullable();
+            $table->foreignId('poin_id')->constrained('poins');
+            $table->text('sangat_kurang');
+            $table->text('kurang');
+            $table->text('cukup_baik');
+            $table->text('baik');
+            $table->text('sangat_baik');
             $table->timestamps();
         });
     }
@@ -26,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('daftar_sub_standars');
+        Schema::dropIfExists('indikators');
     }
 };

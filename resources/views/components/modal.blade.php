@@ -7,7 +7,7 @@
                     <h5 class="modal-title" id="modal-title">Modal title</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
                 </div> <!-- end modal header -->
-                <form action="javascript:void(0);" method="post" class="form-horizontal" enctype="multipart/form-data"
+                <form action="#" method="post" class="form-horizontal" enctype="multipart/form-data"
                     id="myForm">
                     {{ $slot }}
                     <div class="modal-footer">

@@ -10,7 +10,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <!-- App favicon -->
-    <link rel="shortcut icon" href="{{ asset('design-sistem/assets/images/favicon.ico') }}">
+    <link rel="shortcut icon" href="{{ asset('design-sistem/assets/images/logo_sm.png') }}">
     <!-- App css -->
     <link href="{{ asset('design-sistem/assets/css/icons.min.css') }}" rel="stylesheet" type="text/css">
     <link href="{{ asset('design-sistem/assets/css/app.min.css') }}" rel="stylesheet" type="text/css" id="light-style">
@@ -62,18 +62,6 @@
                 <!--- Sidemenu -->
                 @include('layouts.sidebar')
 
-                <!-- Help Box -->
-                <div class="help-box text-white text-center">
-                    <a href="javascript: void(0);" class="float-end close-btn text-white">
-                        <i class="mdi mdi-close"></i>
-                    </a>
-                    <img src="{{ asset('design-sistem/assets/images/help-icon.svg') }}" height="90"
-                        alt="Helper Icon Image">
-                    <h5 class="mt-3">Unlimited Access</h5>
-                    <p class="mb-3">Upgrade to plan to get access to unlimited reports</p>
-                    <a href="javascript: void(0);" class="btn btn-outline-light btn-sm">Upgrade</a>
-                </div>
-                <!-- end Help Box -->
                 <!-- End Sidebar -->
 
                 <div class="clearfix"></div>

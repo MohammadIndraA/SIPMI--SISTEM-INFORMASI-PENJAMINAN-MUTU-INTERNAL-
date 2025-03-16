@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\DaftarSubStandarRequest;
-use App\Models\DaftarSubStandar;
+use App\Http\Requests\PoinRequest;
+use App\Models\Poin;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\Middleware;
 
-class DaftarSubStandarController extends Controller
+class PoinController extends Controller
 {
+    
     public static function middleware()
     {
         return [
@@ -21,14 +22,14 @@ class DaftarSubStandarController extends Controller
     }
 
 
-    public function store(DaftarSubStandarRequest $request)
+    public function store(PoinRequest $request)
     {
         try {
             // Data sudah tervalidasi melalui PermissionRequest
             $data = $request->validated();
-            $data['daftar_standar_mutu_id'] = $request->daftar_standar_mutu_id; 
-            $data['daftar_standar_id'] = $request->id; 
-            $daftarStandar = DaftarSubStandar::create($data);
+            $data['nama_poin'] = $request->nama_standar_mutu;
+            $data['daftar_sub_standar_id'] = $request->id; 
+            $daftarStandar = Poin::create($data);
             return response()->json([
                 "status" => true,
                 "data" => $daftarStandar,
@@ -46,17 +47,18 @@ class DaftarSubStandarController extends Controller
 
     public function edit(Request $request)
     {
-            $daftarStandar = DaftarSubStandar::with('daftar_standar_mutu')->findOrFail($request->id);
+            $daftarStandar = Poin::with('daftar_sub_standar.daftar_standar_mutu')->findOrFail($request->id);
         return response()->json([
             "status" => true,
             "data" => $daftarStandar,
         ]);
     }
 
-    public function update(DaftarSubStandarRequest $request, $id)
+    public function update(PoinRequest $request, $id)
     {
         try {
-            $daftarStandar = DaftarSubStandar::findOrFail($id);
+            $daftarStandar = Poin::findOrFail($id);
+            $data['nama_poin'] = $request->nama_standar_mutu;
             $data = $request->validated();  
 
             $daftarStandar->update($data); 
@@ -64,13 +66,13 @@ class DaftarSubStandarController extends Controller
             return response()->json([
                 "status" => true,
                 "data" => $daftarStandar,
-                "message" => "Data Sub Standar berhasil diupdate"
+                "message" => "Data Poin berhasil diupdate"
             ], 200); // HTTP Status 200 untuk sukses
         } catch (ModelNotFoundException $e) {
             // Jika user dengan ID tersebut tidak ditemukan
             return response()->json([
                 "status" => false,
-                "message" => "Data Sub Standar tidak ditemukan",
+                "message" => "Data Poin tidak ditemukan",
             ], 404); // HTTP Status 404 untuk not found
         } catch (\Exception $e) {
             // Tangkap error lain yang mungkin terjadi
@@ -85,16 +87,16 @@ class DaftarSubStandarController extends Controller
     public function destroy(Request $request)
     {
         try {
-            $daftarStandar = DaftarSubStandar::findOrFail($request->id);
+            $daftarStandar = Poin::findOrFail($request->id);
             $daftarStandar->delete();
             return response()->json([
                 "status" => true,
-                "message" => "Data Sub Standar berhasil dihapus"
+                "message" => "Data Poin berhasil dihapus"
             ], 200); // HTTP Status 200 untuk sukses
         } catch (ModelNotFoundException $e) {
             return response()->json([
                 "status" => false,
-                "message" => "Data Sub Standar tidak ditemukan",
+                "message" => "Data Poin tidak ditemukan",
             ], 404); // HTTP Status 404 untuk not found
         } catch (\Exception $e) {
             return response()->json([

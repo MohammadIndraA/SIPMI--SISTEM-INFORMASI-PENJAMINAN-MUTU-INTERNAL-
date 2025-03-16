@@ -73,13 +73,13 @@
 
 
                     <div class="table-responsive">
-                        <table class="table table-borderless nowrap" id="data-table">
-                            <thead class="">
+                        <table class="table w-100" id="data-table">
+                            <thead class="table-light">
                                 <tr>
                                     <th style="width: 10px">#</th>
-                                    <th>Standar Mutu</th>
-                                    <th>Indikator</th>
-                                    <th style="width: 20px" class="text-center"><i class="dripicons-gear"></i></th>
+                                    <th class="text-center" width="80%" style="width: 90% !important;">Standar Mutu
+                                    </th>
+                                    <th style="width: 10px;" class="text-center"><i class="dripicons-gear"></i></th>
                                     {{-- <th style="width: 85px;">Action</th> --}}
                                 </tr>
                             </thead>
@@ -96,6 +96,8 @@
                 modal-lg
             </x-slot>
             <input type="hidden" name="id" id="id">
+            <input type="hidden" name="daftar_standar_mutu_id" id="daftar_standar_mutu_id">
+            <input type="hidden" name="daftar_standar_id" id="daftar_standar_id">
             <div class="row mb-1">
                 <label for="tahun_periode_id" class="col-3 col-form-label">Tahun <sop class="text-danger">*
                     </sop>
@@ -136,8 +138,10 @@
                 </label>
                 <div class="col-9">
                     <select class="form-select mb-1" id="kategori" name="kategori">
-                        <option value="Standar">Standar</option>
-                        <option value="Sub Standar">Sub Standar</option>
+                        <option selected disabled>-- Pilih Kategori --</option>
+                        <option value="Standar" id="standar">Standar</option>
+                        <option value="Sub Standar" id="sub_standar">Sub Standar</option>
+                        <option value="Poin" id="poin">Poin</option>
                     </select>
                 </div>
             </div>
@@ -224,14 +228,14 @@
                         data: 'nama_standar_mutu',
                         name: 'nama_standar_mutu',
                     },
-                    {
-                        data: 'indikator',
-                        name: 'indikator',
-                        searchable: false,
-                        render: function(data, type, row) {
-                            return data ?? 0;
-                        }
-                    },
+                    // {
+                    //     data: 'indikator',
+                    //     name: 'indikator',
+                    //     searchable: false,
+                    //     render: function(data, type, row) {
+                    //         return data ?? 0;
+                    //     }
+                    // },
                     {
                         data: 'action',
                         searchable: false,
@@ -288,7 +292,7 @@
         }
 
         // trigger edit modal
-        function editFunc(id) {
+        function editFunc(id, type) {
             $('#myForm').trigger("reset");
             $('#myForm').find('.is-invalid').removeClass('is-invalid'); // Remove validation errors
             $('#myForm').find('.invalid-feedback').text(''); // Clear validation error messages
@@ -299,21 +303,38 @@
             $(".standar").addClass("d-none").fadeOut();
             $(".sub-standar").addClass("d-none").fadeOut();
             // url action to update
-            let url = `{{ route('daftar-standar-mutu.update', 'id') }}`
+            let url = `{{ route('daftar-standar-mutu.update', 'id') }}`;
+            let urlEdit = `{{ route('daftar-standar-mutu.edit') }}`;
             $('#myForm').attr('action', url.replace('id', id));
             $('#myForm').data('type', 'edit');
 
             $.ajax({
                 type: "GET",
-                url: "{{ route('daftar-standar-mutu.edit') }}",
+                url: urlEdit,
                 data: {
                     id: id
                 },
                 dataType: 'json',
                 success: function(res) {
+                    console.log(res.data);
+
                     $('#modal-title').html("Edit Data Daftar Daftar Mutu");
                     $('#modal-form').modal('show');
                     $('#id').val(res.data.id);
+                    if (res.data.lembaga_akreditasi_id == null) {
+                        $('#lembaga_akreditasi_id').val(res.data.daftar_standar_mutu.lembaga_akreditasi_id);
+                        $('#tahun_periode_id').val(res.data.daftar_standar_mutu.tahun_periode_id);
+                        $('#myForm').find('.summernote').summernote('code', res.data.nama_standar);
+                    }
+                    if (res.data.nama_sub_standar != null) {
+                        $('#lembaga_akreditasi_id').val(res.data.daftar_standar_mutu.lembaga_akreditasi_id);
+                        $('#tahun_periode_id').val(res.data.daftar_standar_mutu.tahun_periode_id);
+                        $('#myForm').find('.summernote').summernote('code', res.data.nama_sub_standar);
+                        $('#kategori').val('Sub Standar');
+                        $('#jenjang').val(res.data.jenjang);
+                        $('#isian_rumus').val(res.data.isian_rumus);
+                        $('#jenis_perhitungan').val(res.data.jenis_perhitungan);
+                    }
                     $('#lembaga_akreditasi_id').val(res.data.lembaga_akreditasi_id);
                     $('#tahun_periode_id').val(res.data.tahun_periode_id);
                     $('#deskripsi').val(res.data.deskripsi);
@@ -326,40 +347,74 @@
                 }
             });
         }
+
+        $('#btnClose').on('click', function() {
+            $('#myForm').trigger("reset"); // Mereset form
+            $('#kategori').val(''); // Mereset nilai select ke default (opsional)
+            $('#kategori option').show(); // Menampilkan semua opsi yang sebelumnya disembunyikan
+            $(".standar").addClass("d-none").fadeOut();
+            $(".sub-standar").addClass("d-none").fadeOut();
+        });
         // trigger tambah sub standar
-        function addStandar(id) {
+        function addStandar(id, type) {
             $('#myForm').trigger("reset");
+            $('#myForm').data('type', 'add');
             $('#myForm').find('.is-invalid').removeClass('is-invalid'); // Remove validation errors
             $('#myForm').find('.invalid-feedback').text(''); // Clear validation error messages
             $('#modal-title').text("Tambah Data Standar");
             $('#modal-form-standar').modal('show');
             $('#myForm').find('.summernote').summernote('code', '');
+            $('#kategori').prop('disabled', false); // Menonaktifkan elemen <select>
+
+            // cek jika standar
+            if (type == 'daftar-standar-mutu') {
+                $('#sub_standar').hide();
+            } else if (type == 'daftar-standar') {
+                $('#standar').hide();
+            } else if (type == 'daftar-sub-standar') {
+                $('#standar').hide();
+                $('#sub_standar').hide();
+            }
             // Deklarasi variabel url di luar blok if-else
             let url;
-            if ($('#kategori').val() == 'Standar') {
-                url = `{{ route('daftar-standar.store') }}`
-            } else {
-                url = `{{ route('daftar-sub-standar.store') }}`
-            }
-            $('#myForm').attr('action', url);
-            $('#myForm').attr('method', 'POST');
+            const kategori = $('#kategori').val(); // Ambil nilai dari #kategori
+
             $("#lembaga_akreditasi_id").attr("disabled", true);
             $("#tahun_periode_id").attr("disabled", true);
             $(".standar").removeClass("d-none").fadeIn();
 
+            let urlEdit;
+            if (type == 'daftar-standar-mutu') {
+                urlEdit = `{{ route('daftar-standar-mutu.edit') }}`
+            } else if (type == 'daftar-standar') {
+                urlEdit = `{{ route('daftar-standar.edit') }}`
+            } else {
+                urlEdit = `{{ route('daftar-sub-standar.edit') }}`
+            }
+
             $.ajax({
                 type: "GET",
-                url: "{{ route('daftar-standar-mutu.edit') }}",
+                url: urlEdit,
                 data: {
                     id: id
                 },
                 dataType: 'json',
                 success: function(res) {
-                    $('#modal-title').html("Edit Data Standar");
+                    console.log(res.data);
+                    $('#modal-title').html("Tambah Data");
                     $('#modal-form').modal('show');
                     $('#id').val(res.data.id);
-                    $('#lembaga_akreditasi_id').val(res.data.lembaga_akreditasi_id);
-                    $('#tahun_periode_id').val(res.data.tahun_periode_id);
+                    $('#daftar_standar_mutu_id').val(res.data.daftar_standar_mutu_id);
+                    $('#daftar_standar_id').val(res.data.daftar_standar_id);
+                    if (res.data.nama_standar_mutu != null) {
+                        if (res.data.nama_standar_mutu != null) {
+                            $('#lembaga_akreditasi_id').val(res.data.lembaga_akreditasi_id);
+                            $('#tahun_periode_id').val(res.data.tahun_periode_id);
+                        }
+                        if (res.data.nama_standar != null) {
+                            $('#tahun_periode_id').val(res.data.daftar_standar_mutu.tahun_periode_id);
+                        }
+                    }
                 },
                 error: function(data) {
                     console.log(data.errors);
@@ -369,15 +424,113 @@
             });
         }
 
+        // edit standar dan sub standar
+        function editStandar(id, type) {
+            $('#myForm').trigger("reset");
+            $('#myForm')[0].reset();
+            $('#myForm').find('.is-invalid').removeClass('is-invalid'); // Remove validation errors
+            $('#myForm').find('.invalid-feedback').text(''); // Clear validation error messages
+            $('#modal-form-standar').modal('show');
+            $('#modal-title').text("Edit Data Daftar Mutu");
+            $("#lembaga_akreditasi_id").attr("disabled", true);
+            $("#tahun_periode_id").attr("disabled", true);
+            $(".standar").removeClass("d-none").fadeIn();
+            $('#kategori').prop('disabled', true); // Menonaktifkan elemen <select>
+            // url action to update
+            let url = "";
+            let urlEdit = "";
+            if (type == 'daftar-standar-mutu') {
+                urlEdit = `{{ route('daftar-standar-mutu.edit') }}`
+                url = `{{ route('daftar-standar-mutu.update', 'id') }}`
+            } else if (type == 'daftar-standar') {
+                urlEdit = `{{ route('daftar-standar.edit') }}`
+                url = `{{ route('daftar-standar.update', 'id') }}`
+            } else if (type == 'daftar-sub-standar') {
+                urlEdit = `{{ route('daftar-sub-standar.edit') }}`
+                url = `{{ route('daftar-sub-standar.update', 'id') }}`
+            } else if (type == "poin") {
+                urlEdit = `{{ route('poin.edit') }}`
+                url = `{{ route('poin.update', 'id') }}`
+            }
+            $('#myForm').attr('action', url.replace('id', id));
+            $('#myForm').data('type', 'edit');
+
+            $.ajax({
+                type: "GET",
+                url: urlEdit,
+                data: {
+                    id: id
+                },
+                dataType: 'json',
+                success: function(res) {
+                    console.log(res.data);
+
+                    $('#modal-title').html("Edit Data Daftar Mutu");
+                    $('#modal-form').modal('show');
+                    $('#id').val(res.data.id);
+                    // standar
+                    if (res.data.nama_standar != null) {
+                        $('#lembaga_akreditasi_id').val(res.data.daftar_standar_mutu.lembaga_akreditasi_id);
+                        $('#tahun_periode_id').val(res.data.daftar_standar_mutu.tahun_periode_id);
+                        $('#myForm').find('.summernote').summernote('code', res.data.nama_standar);
+                        $('#kategori').val('Standar');
+                    }
+                    // sub standar
+                    $('#daftar_standar_mutu_id').val(res.data.daftar_standar_mutu_id);
+                    if (res.data.nama_sub_standar != null) {
+                        $('#lembaga_akreditasi_id').val(res.data.daftar_standar_mutu.lembaga_akreditasi_id);
+                        $('#tahun_periode_id').val(res.data.daftar_standar_mutu.tahun_periode_id);
+                        $('#myForm').find('.summernote').summernote('code', res.data.nama_sub_standar);
+                        $('#kategori').val('Sub Standar');
+                        $('#jenjang').val(res.data.jenjang);
+                        $('#isian_rumus').val(res.data.isian_rumus);
+                        $('#jenis_perhitungan').val(res.data.jenis_perhitungan);
+                        $(".standar").removeClass("d-none");
+                        $(".sub-standar").removeClass("d-none");
+                    }
+                    // poin
+                    if (res.data.daftar_sub_standar != null) {
+                        $('#lembaga_akreditasi_id').val(res.data.daftar_sub_standar.daftar_standar_mutu
+                            .lembaga_akreditasi_id);
+                        $('#tahun_periode_id').val(res.data.daftar_sub_standar.daftar_standar_mutu
+                            .tahun_periode_id);
+                        $('#myForm').find('.summernote').summernote('code', res.data.nama_sub_standar);
+                        $('#kategori').val('Poin');
+                        $('#jenjang').val(res.data.jenjang);
+                        $('#isian_rumus').val(res.data.isian_rumus);
+                        $('#jenis_perhitungan').val(res.data.jenis_perhitungan);
+                        $(".standar").removeClass("d-none");
+                        $(".sub-standar").removeClass("d-none");
+                    }
+                    $('#deskripsi').val(res.data.deskripsi);
+                    $('#myForm').find('.summernote').summernote('code', res.data.nama_standar_mutu);
+                },
+                error: function(data) {
+                    console.log(data.errors);
+                    $('#myForm').trigger("reset");
+                    alertNotify('error', data.responseJSON.message);
+                }
+            });
+        }
+
         // trigger delete
-        function deleteFunc(id) {
+        function deleteFunc(id, type) {
             if (confirm("Delete Record?") == true) {
                 var id = id;
-
+                let urlEdit;
+                if (type == 'daftar-standar-mutu') {
+                    urlEdit = `{{ route('daftar-standar-mutu.delete') }}`
+                } else if (type == 'daftar-standar') {
+                    urlEdit = `{{ route('daftar-standar.delete') }}`
+                } else if (type == 'daftar-sub-standar') {
+                    urlEdit = `{{ route('daftar-sub-standar.delete') }}`
+                } else if (type == 'poin') {
+                    urlEdit = `{{ route('poin.delete') }}`
+                }
                 // ajax
                 $.ajax({
                     type: "DELETE",
-                    url: "{{ route('daftar-standar-mutu.delete') }}",
+                    url: urlEdit,
                     data: {
                         id: id
                     },
@@ -388,6 +541,8 @@
                         oTable.fnDraw(false);
                     },
                     error: function(data) {
+                        console.log(data.errors);
+
                         alertNotify('error', data.responseJSON.message);
                     }
                 });
@@ -428,6 +583,8 @@
                     $("#btnSave").html("Simpan");
                     $("#btnSave").attr("disabled", false);
                     alertNotify('success', data.message);
+                    $(".standar").addClass("d-none").fadeOut();
+                    $(".sub-standar").addClass("d-none").fadeOut();
                 },
                 error: function(data) {
                     $("#btnSave").html("Simpan");
@@ -442,6 +599,11 @@
             if ($(this).val() == 'Sub Standar') {
                 $(".sub-standar").removeClass("d-none").fadeIn();
                 $('#myForm').attr('action', `{{ route('daftar-sub-standar.store') }}`);
+            } else if ($(this).val() == 'Poin') {
+                $(".sub-standar").removeClass("d-none").fadeIn();
+                $('#myForm').attr('action', `{{ route('poin.store') }}`);
+            } else if ($(this).val() == 'Standar') {
+                $('#myForm').attr('action', `{{ route('daftar-standar.store') }}`);
             } else {
                 $(".sub-standar").addClass("d-none").fadeOut();
             }

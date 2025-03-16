@@ -15,4 +15,14 @@ class DaftarStandarMutu extends Model
         'deskripsi',
     ];
     
+    public function daftar_standars()
+    {
+        return $this->hasMany(DaftarStandar::class, 'daftar_standar_mutu_id');
+    }
+
+    public function daftar_sub_standars()
+    {
+        return $this->hasMany(DaftarSubStandar::class, 'daftar_standar_mutu_id');
+    }
+
 }
