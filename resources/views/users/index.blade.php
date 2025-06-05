@@ -64,13 +64,24 @@
                     placeholder="Enter email" value="{{ old('email') }}">
             </div>
 
-            <!-- Single Select -->
+            <!-- Single Select Role-->
             <div class="mb-2">
                 <label for="role" class="form-label">Role</label>
                 <select class="form-select" id="roles" name="roles">
                     <option disabled selected>Open this select menu</option>
                     @foreach ($roles as $item)
                         <option value="{{ $item }}">{{ $item }}</option>
+                    @endforeach
+                </select>
+            </div>
+
+            <!-- Single Select Prodi-->
+            <div class="mb-2">
+                <label for="fakultas_id" class="form-label">Prodi / Fakultas</label>
+                <select class="form-select" id="fakultas_id" name="fakultas_id">
+                    <option disabled selected>Open this select menu</option>
+                    @foreach ($prodis as $item)
+                        <option value="{{ $item->id }}">{{ $item->fakultas_prodi }}</option>
                     @endforeach
                 </select>
             </div>

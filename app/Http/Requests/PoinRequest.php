@@ -25,7 +25,6 @@ class PoinRequest extends FormRequest
     {
         return [
             'deskripsi' => 'nullable|string',
-            'kategori' => 'required|string',
             'jenjang' => 'required',
             'jenis_perhitungan' => 'required',
             'isian_rumus' => 'required',
@@ -36,8 +35,6 @@ class PoinRequest extends FormRequest
     {
         return [
             'nama_poin.required' => 'Nama Poin  harus diisi.',
-            'nama_poin.unique' => 'Nama Poin  sudah ada.',
-            'kategori.required' => 'Kategori Sub Standar  harus diisi.',
             'jenjang.required' => 'Jenjang Sub Standar  harus diisi.',
             'jenis_perhitungan.required' => 'Jenis Perhitungan Sub Standar  harus diisi.',
             'isian_rumus.required' => 'Isian Rumus Sub Standar  harus diisi.',

@@ -37,6 +37,7 @@ class UserRequest extends FormRequest
                 'password' => $this->isMethod('post') // Wajib saat store, opsional saat update
                     ? 'required|string|min:8'
                     : 'nullable|string|min:8',
+                 'fakultas_id' => 'required|exists:fakultas_prodis,id', 
             ];
         }
 
@@ -47,6 +48,7 @@ class UserRequest extends FormRequest
             'email.required' => 'Email wajib diisi.',
             'email.unique' => 'Email sudah terdaftar.',
             'password.required' => 'Password tidak boleh kosong.',
+            'fakultas_id.required' => 'Fakultas Prodi harus dipilih.',
         ];
     }
 

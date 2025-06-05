@@ -22,6 +22,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'fakultas_id',
     ];
 
     /**
@@ -45,5 +46,10 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function fakultas()
+    {
+        return $this->belongsTo(FakultasProdi::class);
     }
 }

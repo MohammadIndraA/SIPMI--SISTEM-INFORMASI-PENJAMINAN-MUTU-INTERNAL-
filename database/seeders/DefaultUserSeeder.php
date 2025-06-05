@@ -14,14 +14,6 @@ class DefaultUserSeeder extends Seeder
      */
     public function run(): void
     {
-          // Creating Super Admin User
-          $superAdmin = User::create([
-            'name' => 'Super Admin', 
-            'email' => 'superadmin@example.com',
-            'password' => Hash::make('password')
-        ]);
-        $superAdmin->assignRole('Super Admin');
-
         // Creating Admin User
         $admin = User::create([
             'name' => 'Admin', 
@@ -36,7 +28,7 @@ class DefaultUserSeeder extends Seeder
             'email' => fake()->email(),
             'password' => Hash::make('password')
         ]);
-        $Ketua_LPM->assignRole('Ketua LPM');
+        $Ketua_LPM->assignRole('Auditor');
 
         // Creating Ketua Program Studi User
         $Ketua_Program_Studi = User::create([
@@ -44,37 +36,7 @@ class DefaultUserSeeder extends Seeder
             'email' => fake()->email(),
             'password' => Hash::make('password')
         ]);
-        $Ketua_Program_Studi->assignRole('Ketua Program Studi');
+        $Ketua_Program_Studi->assignRole('Kaprodi');
 
-        // Creating Mahasiswa User
-        $Mahasiswa = User::create([
-            'name' => fake()->name(), 
-            'email' => fake()->email(),
-            'password' => Hash::make('password')
-        ]);
-        $Mahasiswa->assignRole('Mahasiswa');
-
-        // Creating Alumni User
-        $Alumni = User::create([
-            'name' => fake()->name(), 
-            'email' => fake()->email(),
-            'password' => Hash::make('password')
-        ]);
-        $Alumni->assignRole('Alumni');
-
-        // Creating Dosen User
-        $Dosen = User::create([
-            'name' => fake()->name(), 
-            'email' => fake()->email(),
-            'password' => Hash::make('password')
-        ]);
-        $Dosen->assignRole('Dosen');
-
-        // Creating UPPS User
-        $UPPS = User::create([
-            'name' => fake()->name(), 
-            'email' => fake()->email(),
-            'password' => Hash::make('password')
-        ]);
     }
 }

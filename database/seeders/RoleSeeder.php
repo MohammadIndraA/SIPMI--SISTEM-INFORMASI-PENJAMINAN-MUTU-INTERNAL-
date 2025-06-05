@@ -13,14 +13,9 @@ class RoleSeeder extends Seeder
      */
     public function run(): void
     {
-        Role::create(['name' => 'Super Admin']);
         $admin = Role::create(['name' => 'Admin']);
-        $Ketua_LPM = Role::create(['name' => 'Ketua LPM']);
-        $Ketua_Program_Studi = Role::create(['name' => 'Ketua Program Studi']);
-        $Mahasiswa = Role::create(['name' => 'Mahasiswa']);
-        $Alumni = Role::create(['name' => 'Alumni']);
-        $Dosen = Role::create(['name' => 'Dosen']);
-        $UPPS = Role::create(['name' => 'UPPS']);
+        $auditor = Role::create(['name' => 'Auditor']);
+        $kaprodi = Role::create(['name' => 'Kaprodi']);
 
         $admin->givePermissionTo([
             'create-user',
@@ -81,30 +76,31 @@ class RoleSeeder extends Seeder
             'create-daftar-standar-mutu',
             'edit-daftar-standar-mutu',
             'delete-daftar-standar-mutu',
+            'view-desk-evaluation', // desk evaluation
+            'view-rekap-daftar-temuan',
+            'view-visitasi',
+            'view-bukti-pendukung',
+            'create-bukti-pendukung',
+            'create-daftar-temuan',
+            'view-rencana-tindak-lanjut',
+            'view-standar-mutu',
+            'view-sub-standar'
         ]);
 
-        $Ketua_LPM->givePermissionTo([
-            'view-user',
+        $kaprodi->givePermissionTo([
+            'view-evaluasi-diri',
+            'view-manajemen-dokumen',
+            'create-manajemen-dokumen',
+            'edit-manajemen-dokumen',
+            'delete-manajemen-dokumen',
+            'view-rekap-desk-evaluasi',
+            'view-daftar-temuan',
         ]);
 
-        $Ketua_Program_Studi->givePermissionTo([
-            'view-user',
-        ]);
-
-        $Mahasiswa->givePermissionTo([
-            'view-user',
-        ]);
-
-        $Alumni->givePermissionTo([
-            'view-user',
-        ]);
-
-        $Dosen->givePermissionTo([
-            'view-user',
-        ]);
-
-        $UPPS->givePermissionTo([
-            'view-user',
+        $auditor->givePermissionTo([
+            'view-desk-evaluation',
+            'view-rekap-daftar-temuan',
+            'view-visitasi',
         ]);
     }
 }

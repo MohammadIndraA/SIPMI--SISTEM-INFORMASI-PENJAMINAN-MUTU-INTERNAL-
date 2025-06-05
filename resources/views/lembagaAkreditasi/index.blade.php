@@ -8,10 +8,10 @@
                     <ol class="breadcrumb m-0">
                         <li class="breadcrumb-item"><a href="javascript: void(0);">Page</a></li>
                         <li class="breadcrumb-item"><a href="javascript: void(0);">Table</a></li>
-                        <li class="breadcrumb-item active">Lembaga Akreditasi"</li>
+                        <li class="breadcrumb-item active">Lembaga Akreditasi</li>
                     </ol>
                 </div>
-                <h4 class="page-title">Lembaga Akreditasi"</h4>
+                <h4 class="page-title">Lembaga Akreditasi</h4>
             </div>
         </div>
     </div>

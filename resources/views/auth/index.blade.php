@@ -33,7 +33,7 @@
                         <!-- Logo -->
                         <div class="card-header pt-4 pb-4 text-center bg-primary">
                             <a href="index.html">
-                                <span><img src="{{ asset('design-sistem/assets/images/logo.png') }}" alt=""
+                                <span><img src="{{ asset('design-sistem/assets/images/logo1.png') }}" alt=""
                                         height="18"></span>
                             </a>
                         </div>

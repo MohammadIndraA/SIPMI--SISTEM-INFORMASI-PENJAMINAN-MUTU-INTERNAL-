@@ -14,10 +14,10 @@ class PoinController extends Controller
     public static function middleware()
     {
         return [
-            new Middleware('permission:view-daftar-sub-standar', ['only' => ['index','show']]),
-            new Middleware('permission:create-daftar-sub-standar', ['only' => ['create','store']]),
-            new Middleware('permission:edit-daftar-sub-standar', ['only' => ['edit','update']]),
-            new Middleware('permission:delete-daftar-sub-standar', ['only' => ['destroy']]),
+            new Middleware('permission:view-poin', ['only' => ['index','show']]),
+            new Middleware('permission:create-poin', ['only' => ['create','store']]),
+            new Middleware('permission:edit-poin', ['only' => ['edit','update']]),
+            new Middleware('permission:delete-poin', ['only' => ['destroy']]),
         ];
     }
 
@@ -58,8 +58,8 @@ class PoinController extends Controller
     {
         try {
             $daftarStandar = Poin::findOrFail($id);
-            $data['nama_poin'] = $request->nama_standar_mutu;
             $data = $request->validated();  
+            $data['nama_poin'] = $request->nama_standar_mutu;
 
             $daftarStandar->update($data); 
 

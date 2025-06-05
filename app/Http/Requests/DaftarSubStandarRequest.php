@@ -28,9 +28,9 @@ class DaftarSubStandarRequest extends FormRequest
                 Rule::unique('daftar_sub_standars', 'nama_sub_standar')->ignore($request->id),
             ],
             'deskripsi' => 'nullable|string',
-            'jenjang' => 'required',
-            'jenis_perhitungan' => 'required',
-            'isian_rumus' => 'required',
+            'jenjang' => 'nullable|string',
+            'jenis_perhitungan' => 'nullable|string',
+            'isian_rumus' => 'nullable|string',
 
         ];
     }
@@ -40,10 +40,10 @@ class DaftarSubStandarRequest extends FormRequest
         return [
             'nama_sub_standar.required' => 'Nama Sub Standar  harus diisi.',
             'nama_sub_standar.unique' => 'Nama Sub Standar  sudah ada.',
-            'kategori.required' => 'Kategori Sub Standar  harus diisi.',
-            'jenjang.required' => 'Jenjang Sub Standar  harus diisi.',
-            'jenis_perhitungan.required' => 'Jenis Perhitungan Sub Standar  harus diisi.',
-            'isian_rumus.required' => 'Isian Rumus Sub Standar  harus diisi.',
+            'kategori' => 'Kategori Sub Standar  harus diisi.',
+            'jenjang' => 'Jenjang Sub Standar  harus diisi.',
+            'jenis_perhitungan' => 'Jenis Perhitungan Sub Standar  harus diisi.',
+            'isian_rumus' => 'Isian Rumus Sub Standar  harus diisi.',
         ];
     }
 }

@@ -192,6 +192,11 @@
         </div>
     </x-modal>
 
+    {{-- modal indikator --}}
+    <x-modal-indikator>
+    </x-modal-indikator>
+
+
     {{-- panggil form standar --}}
     @includeIf('includes.summernote')
 @endsection
@@ -489,12 +494,12 @@
                         $(".sub-standar").removeClass("d-none");
                     }
                     // poin
-                    if (res.data.daftar_sub_standar != null) {
+                    if (res.data.nama_poin != null) {
                         $('#lembaga_akreditasi_id').val(res.data.daftar_sub_standar.daftar_standar_mutu
                             .lembaga_akreditasi_id);
                         $('#tahun_periode_id').val(res.data.daftar_sub_standar.daftar_standar_mutu
                             .tahun_periode_id);
-                        $('#myForm').find('.summernote').summernote('code', res.data.nama_sub_standar);
+                        $('#myForm').find('.summernote').summernote('code', res.data.nama_poin);
                         $('#kategori').val('Poin');
                         $('#jenjang').val(res.data.jenjang);
                         $('#isian_rumus').val(res.data.isian_rumus);
@@ -607,6 +612,87 @@
             } else {
                 $(".sub-standar").addClass("d-none").fadeOut();
             }
+        });
+        // Fungsi untuk tampilkan modal dengan data indikator jika ada id  
+        function addIndikator(poin) {
+            // Reset form and set poin value
+            $('#myFormindikator').trigger("reset");
+            $('#poin_id').val(poin);
+
+            // Show modal immediately while loading data
+            $('#modal-form-indikator').modal('show');
+
+            // AJAX call with better error handling and cleaner code
+            $.ajax({
+                type: "GET",
+                url: "{{ route('indikator.edit') }}",
+                data: {
+                    id: poin
+                }, // Using the passed poin parameter as id
+                dataType: 'json',
+                success: function(response) {
+                    if (response.data) {
+                        const data = response.data;
+                        console.log(data);
+                        $('input[name="id"]').val(data.id);
+                        // Simplified field population
+                        const fields = [
+                            'id', 'sangat_kurang', 'kurang',
+                            'cukup_baik', 'baik', 'sangat_baik'
+                        ];
+
+                        fields.forEach(field => {
+                            $(`#${field}`).val(data[field] ?? '');
+                        });
+                    }
+                },
+                error: function(xhr) {
+                    const response = xhr.responseJSON;
+                    const message = response?.message || "Terjadi kesalahan";
+
+                    if (response?.status?.code === 404) {
+                        alertNotify('error', "Data belum diisi");
+                    } else {
+                        alertNotify('error', message);
+                    }
+                }
+            });
+        }
+
+        // Pastikan ini hanya didaftarkan sekali, misalnya di document ready  
+        $('#myFormindikator').submit(function(e) {
+            e.preventDefault();
+            $("#btn-indikator").html(`  
+            <div class="spinner-border spinner-border-sm" role="status">  
+                <span class="visually-hidden">Loading...</span>  
+            </div> Loading...  
+            `);
+            $("#btn-indikator").attr("disabled", true);
+
+            let formData = new FormData(this); // ambil semua data form otomatis  
+
+            $.ajax({
+                type: 'POST',
+                url: "{{ route('indikator.store') }}",
+                data: formData,
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: (data) => {
+                    $("#modal-form-indikator").modal('hide');
+                    var oTable = $('#data-table').dataTable();
+                    oTable.fnDraw(false);
+                    $("#btn-indikator").html("Simpan");
+                    $("#btn-indikator").attr("disabled", false);
+                    alertNotify('success', data.message);
+                },
+                error: function(data) {
+                    $("#btn-indikator").html("Simpan");
+                    $("#btn-indikator").attr("disabled", false);
+                    loopErrors(data.responseJSON.errors);
+                    alertNotify('error', data.responseJSON.message);
+                }
+            });
         });
     </script>
 @endsection

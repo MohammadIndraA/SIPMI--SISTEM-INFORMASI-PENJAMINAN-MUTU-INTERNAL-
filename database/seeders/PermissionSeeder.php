@@ -73,6 +73,15 @@ class PermissionSeeder extends Seeder
             'create-daftar-standar-mutu',
             'edit-daftar-standar-mutu',
             'delete-daftar-standar-mutu',
+            'view-desk-evaluation', // desk evaluation
+            'view-rekap-daftar-temuan',
+            'view-visitasi',
+            'view-bukti-pendukung',
+            'create-bukti-pendukung',
+            'create-daftar-temuan',
+            'view-rencana-tindak-lanjut',
+            'view-standar-mutu',
+            'view-sub-standar'
          ];
           // Looping and Inserting Array's Permissions into Permission Table
           foreach ($permissions as $permission) {

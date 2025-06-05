@@ -63,10 +63,6 @@
                                     class="mdi mdi-plus-circle me-2"></i>Tambah Target Nilai Mutu</a>
                         </div>
                     </div>
-
-                    @can('view-evaluasi-diri')
-                    @endcan
-
                     <div class="table-responsive">
                         <table class="table table-borderless nowrap" id="data-table">
                             <thead class="">

@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\Auditor\DeskEvaluationController as AuditorDeskEvaluationController;
+use App\Http\Controllers\Auditor\RekapDaftarTemuanController as AuditorRekapDaftarTemuanController;
+use App\Http\Controllers\Auditor\VisitasiController as AuditorVisitasiController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DaftarNilaiMutuController;
 use App\Http\Controllers\DaftarStandarController;
@@ -9,6 +12,7 @@ use App\Http\Controllers\DaftarTemuanController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EvaluasiDiriController;
 use App\Http\Controllers\FakultasProdiController;
+use App\Http\Controllers\IndikatorController;
 use App\Http\Controllers\KategoriDokumenController;
 use App\Http\Controllers\LembagaAkreditasiController;
 use App\Http\Controllers\ManajemenAuditorController;
@@ -16,6 +20,14 @@ use App\Http\Controllers\ManajemenDokumenController;
 use App\Http\Controllers\PengaturanPeriodeController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\PoinController;
+use App\Http\Controllers\Prodi\BuktiPendukungController as ProdiBuktiPendukungController;
+use App\Http\Controllers\Prodi\DaftarTemuanController as ProdiDaftarTemuanController;
+use App\Http\Controllers\Prodi\EvaluasiDiriController as ProdiEvaluasiDiriController;
+use App\Http\Controllers\Prodi\EvalusiDiriController;
+use App\Http\Controllers\Prodi\ProdiController;
+use App\Http\Controllers\Prodi\StandarMutuController as ProdiStandarMutuController;
+use App\Http\Controllers\Prodi\SubStandarController as ProdiSubStandarController;
+use App\Http\Controllers\Prodi\RencanaTindakLanjutController as ProdiRencanaTindakLanjutController;
 use App\Http\Controllers\RekapDeskEvaluasiController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\StandarNasionalController;
@@ -165,12 +177,44 @@ Route::middleware('auth')->group(function () {
      Route::put('/daftar-sub-standar-update/{id}', [DaftarSubStandarController::class, 'update'])->name('daftar-sub-standar.update');
      Route::delete('/daftar-sub-standar-delete', [DaftarSubStandarController::class, 'destroy'])->name('daftar-sub-standar.delete');
    
-     // Daftar sub Standar
+     // Point sub Standar
      Route::post('/poin-store', [PoinController::class, 'store'])->name('poin.store');
      Route::get('/poin-edit', [PoinController::class, 'edit'])->name('poin.edit');
      Route::put('/poin-update/{id}', [PoinController::class, 'update'])->name('poin.update');
      Route::delete('/poin-delete', [PoinController::class, 'destroy'])->name('poin.delete');
+   
+     // Indikator
+     Route::post('/indikator-store', [IndikatorController::class, 'store'])->name('indikator.store');
+     Route::get('/indikator-edit', [IndikatorController::class, 'edit'])->name('indikator.edit');
+     Route::put('/indikator-update/{id}', [IndikatorController::class, 'update'])->name('indikator.update');
 
+    // Prodi / Unit
+    Route::group(['prefix' => 'prodi'], function () { 
+        Route::get('evaluasi-diri', [ProdiEvaluasiDiriController::class, 'index'])->name('prodi.evalusi-diri.index');
+        Route::get('standar-mutu/{fakultas}', [ProdiStandarMutuController::class, 'index'])->name('prodi.standar-mutu.index');
+        Route::get('substandar/{fakultas}/poin/{id}', [ProdiSubStandarController::class, 'index'])->name('prodi.substandar.index');
+        // bukti pendukung 
+        Route::get('/bukti-pendukungs', [ProdiBuktiPendukungController::class, 'index'])->name('prodi.bukti-pendukung.index');
+        Route::post('/bukti-pendukung-store', [ProdiBuktiPendukungController::class, 'store'])->name('prodi.bukti-pendukung.store');
+        // daftar temuan
+        Route::get('/daftar-temuan', [ProdiDaftarTemuanController::class, 'index'])->name('prodi.daftar-temuan.index');
+        Route::post('/daftar-temuan-store', [ProdiDaftarTemuanController::class, 'store'])->name('prodi.daftar-temuan.store');
+        // rekap desk evaluasi
+        Route::get('/rekap-desk-evaluasis',  [ProdiEvaluasiDiriController::class, 'index'])->name('prodi.rekap-desk-evaluasi.index');
+        // Rencana Tindak Lanjut
+        Route::post('/rencana-tindak-lanjuts', [ProdirencanaTindakLanjutController::class, 'store'])->name('prodi.rencana-tindak-lanjut.store');
+
+    } );
+
+
+    Route::group(['prefix' => 'auditor'], function () {
+        // desk evaluation
+        Route::get('desk-evaluations', [AuditorDeskEvaluationController::class, 'index'])->name('auditor.desk-evaluations.index'); 
+        // Rekap daftar Temuan
+        Route::get('rekap-daftar-temuans', [AuditorRekapDaftarTemuanController::class, 'index'])->name('auditor.rekap-daftar-temuan.index');
+        // Visitasi
+        Route::get('visitasis', [AuditorVisitasiController::class, 'index'])->name('auditor.visitasi.index');
+    });
     // logout
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 

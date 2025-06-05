@@ -12,4 +12,5 @@ class FakultasProdi extends Model
         'fakultas_prodi',
         'status',
     ];
+    
 }

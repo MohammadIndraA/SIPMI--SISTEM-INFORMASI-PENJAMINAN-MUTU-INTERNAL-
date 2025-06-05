@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\UserRequest;
+use App\Models\FakultasProdi;
 use App\Models\User;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
@@ -72,7 +73,8 @@ class UserController extends Controller
                 ->make(true);
         }
         $roles =  Role::pluck('name')->all();
-        return view('users.index', compact('roles'));
+        $prodis = FakultasProdi::all();
+        return view('users.index', compact('roles', 'prodis'));
     }
 
     public function store(UserRequest $request)

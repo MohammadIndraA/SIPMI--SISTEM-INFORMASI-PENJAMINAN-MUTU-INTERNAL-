@@ -56,9 +56,10 @@ class DaftarStandarMutuController extends Controller
                                     if ($daftar_sub_standar->poins && $daftar_sub_standar->poins->count() > 0) {
                                         $data .= '<ul class="ms-5 ps-2">'; // Buka <ul> di sini
                                         foreach ($daftar_sub_standar->poins as $poin) {
-                                            $data .= '<li>'; // Buka <li> untuk setiap poin
-                                            $data .= '<p class="">' . $poin->nama_poin . '</p><hr>';
-                                            $data .= '</li>'; // Tutup <li> untuk setiap poin
+                                            $data .= '<div class="inline col-12" style="display: flex; align-items: center;">'; // Buka <div> untuk setiap poin
+                                            $data .= '<li class="col-11"><p class="">' . $poin->nama_poin . '</p><hr></li>';
+                                            $data .= '<div class="col-1"><a onclick="addIndikator(' . $poin->id . ')" class="" style="cursor: pointer;">indikator</a><hr></div>';
+                                            $data .= '</div>'; // Tutup <div> untuk setiap poin
                                         }
                                         $data .= '</ul>'; // Tutup <ul> di sini
                                     }
@@ -133,8 +134,8 @@ class DaftarStandarMutuController extends Controller
                             foreach ($daftar_sub_standar->poins as $poin) {
                                 $buttons .= '
                                  <div class="btn-group pt-2 mb-3">
-                            ' . generateEditButton($poin->id, 'Edit Sub Standar', 'poin', 'btn-primary', 'dripicons-pencil') . '
-                            ' . deleteButton($poin->id, 'Hapus Sub Standar', 'poin', 'btn-danger', 'dripicons-cross') . '
+                            ' . generateEditButton($poin->id, 'Edit Poin', 'poin', 'btn-primary', 'dripicons-pencil') . '
+                            ' . deleteButton($poin->id, 'Hapus Poin', 'poin', 'btn-danger', 'dripicons-cross') . '
                         </div>';
                             }
                         }
