@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\DaftarStandarMutuRequest;
 use App\Models\DaftarStandarMutu;
+use App\Models\FakultasProdi;
 use App\Models\LembagaAkreditasi;
 use App\Models\TahunPeriode;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -133,7 +134,7 @@ class DaftarStandarMutuController extends Controller
                         if ($daftar_sub_standar->relationLoaded('poins') && $daftar_sub_standar->poins->count() > 0) {
                             foreach ($daftar_sub_standar->poins as $poin) {
                                 $buttons .= '
-                                 <div class="btn-group pt-2 mb-3">
+                                 <div class="btn-group mb-3">
                             ' . generateEditButton($poin->id, 'Edit Poin', 'poin', 'btn-primary', 'dripicons-pencil') . '
                             ' . deleteButton($poin->id, 'Hapus Poin', 'poin', 'btn-danger', 'dripicons-cross') . '
                         </div>';
@@ -158,7 +159,8 @@ class DaftarStandarMutuController extends Controller
         }
         $tahunPeriodes = TahunPeriode::all();
         $lembagaAkreditasis = LembagaAkreditasi::all();
-        return view('daftarStandarMutu.index', compact('tahunPeriodes', 'lembagaAkreditasis'));
+        $prodis = FakultasProdi::all();
+        return view('daftarStandarMutu.index', compact('tahunPeriodes', 'lembagaAkreditasis', 'prodis'));
     }
 
     public function store(DaftarStandarMutuRequest $request)

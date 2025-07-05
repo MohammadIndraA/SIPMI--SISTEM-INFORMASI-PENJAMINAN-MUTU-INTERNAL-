@@ -36,8 +36,8 @@
                                 <tr>
                                     <th style="width: 5%; ">#</th>
                                     <th style="width: 50%; text-align: center">Standar Mutu</th>
-                                    <th style="width: 15%; text-align: center">Nilai Mutu</th>
                                     <th style="width: 30%; text-align: center">Daftar Temuan</th>
+                                    {{-- <th style="width: 15%; text-align: center">Nilai Mutu</th> --}}
                                     {{-- <th style="width: 85px;">Action</th> --}}
                                 </tr>
                             </thead>
@@ -118,16 +118,16 @@
                         sortable: false
                     },
                     {
-                        data: 'fakultas',
-                        name: 'fakultas'
+                        data: 'daftar_sub_standar_id',
+                        name: 'daftar_sub_standar_id'
                     },
+                    // {
+                    //     data: 'fakultas_prodi',
+                    //     name: 'fakultas_prodi'
+                    // },
                     {
-                        data: 'fakultas_prodi',
-                        name: 'fakultas_prodi'
-                    },
-                    {
-                        data: 'fakultas_prodi',
-                        name: 'fakultas_prodi'
+                        data: 'temuan',
+                        name: 'temuan'
                     },
 
                 ]

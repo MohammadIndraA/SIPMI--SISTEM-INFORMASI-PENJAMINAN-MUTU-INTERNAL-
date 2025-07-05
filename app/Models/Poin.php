@@ -14,4 +14,9 @@ class Poin extends Model
     {
         return $this->belongsTo(DaftarSubStandar::class);
     }
+
+        public function prodis()
+    {
+        return $this->belongsToMany(FakultasProdi::class, 'poin_prodi', 'poin_id', 'fakultas_prodi_id');
+    }
 }

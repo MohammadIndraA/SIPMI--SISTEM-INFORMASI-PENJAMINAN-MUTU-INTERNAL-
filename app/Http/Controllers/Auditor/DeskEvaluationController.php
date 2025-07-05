@@ -22,6 +22,7 @@ class DeskEvaluationController extends Controller
     {
         $standar_nasionals = StandarNasional::all();
         $fakultas_prodis = FakultasProdi::all();
-        return view('auditor.deskEvaluation.index', compact('standar_nasionals', 'fakultas_prodis'));
+        $fakultas = FakultasProdi::where('id',auth()->user()->fakultas_id)->first();
+        return view('auditor.deskEvaluation.index', compact('standar_nasionals', 'fakultas_prodis', 'fakultas'));
     }
 }

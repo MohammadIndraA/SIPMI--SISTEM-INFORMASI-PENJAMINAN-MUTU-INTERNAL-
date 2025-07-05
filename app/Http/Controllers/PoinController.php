@@ -30,6 +30,7 @@ class PoinController extends Controller
             $data['nama_poin'] = $request->nama_standar_mutu;
             $data['daftar_sub_standar_id'] = $request->id; 
             $daftarStandar = Poin::create($data);
+            $daftarStandar->prodis()->attach($request->prodi);
             return response()->json([
                 "status" => true,
                 "data" => $daftarStandar,
@@ -47,7 +48,7 @@ class PoinController extends Controller
 
     public function edit(Request $request)
     {
-            $daftarStandar = Poin::with('daftar_sub_standar.daftar_standar_mutu')->findOrFail($request->id);
+            $daftarStandar = Poin::with('daftar_sub_standar.daftar_standar_mutu','prodis')->findOrFail($request->id);
         return response()->json([
             "status" => true,
             "data" => $daftarStandar,
@@ -62,7 +63,7 @@ class PoinController extends Controller
             $data['nama_poin'] = $request->nama_standar_mutu;
 
             $daftarStandar->update($data); 
-
+            $daftarStandar->prodis()->sync($request->prodi);
             return response()->json([
                 "status" => true,
                 "data" => $daftarStandar,

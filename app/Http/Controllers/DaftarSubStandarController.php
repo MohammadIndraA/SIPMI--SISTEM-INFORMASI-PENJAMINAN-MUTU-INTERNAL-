@@ -7,6 +7,7 @@ use App\Models\DaftarSubStandar;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\Middleware;
+use Illuminate\Support\Str;
 
 class DaftarSubStandarController extends Controller
 {
@@ -27,7 +28,8 @@ class DaftarSubStandarController extends Controller
             // Data sudah tervalidasi melalui PermissionRequest
             $data = $request->validated();
             $data['daftar_standar_mutu_id'] = $request->daftar_standar_mutu_id; 
-            $data['daftar_standar_id'] = $request->id; 
+            $data['daftar_standar_id'] = $request->id;
+            $data['slug'] = Str::slug($request->nama_sub_standar, '-');
             $daftarStandar = DaftarSubStandar::create($data);
             return response()->json([
                 "status" => true,
@@ -58,7 +60,7 @@ class DaftarSubStandarController extends Controller
         try {
             $daftarStandar = DaftarSubStandar::findOrFail($id);
             $data = $request->validated();  
-
+            $data['slug'] = Str::slug($request->nama_sub_standar, '-');
             $daftarStandar->update($data); 
 
             return response()->json([

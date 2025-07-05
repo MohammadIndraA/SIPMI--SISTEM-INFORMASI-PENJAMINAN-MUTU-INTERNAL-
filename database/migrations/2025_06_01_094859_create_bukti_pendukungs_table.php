@@ -17,6 +17,8 @@ return new class extends Migration
             $table->string('file_pendukung');
             $table->string('unit_pengunggah');
             $table->foreignId('kategori_dokumen_id')->constrained()->onDelete('cascade');
+            $table->foreignId('poin_id')->nullable()->constrained()->onDelete('cascade');
+            $table->foreignId('daftar_sub_standar_id')->nullable()->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }

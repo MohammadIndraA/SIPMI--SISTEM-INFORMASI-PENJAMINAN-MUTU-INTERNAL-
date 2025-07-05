@@ -13,4 +13,8 @@ class FakultasProdi extends Model
         'status',
     ];
     
+    public function poins()
+    {
+        return $this->belongsToMany(Poin::class, 'poin_prodi', 'fakultas_prodi_id', 'poin_id');
+    }
 }

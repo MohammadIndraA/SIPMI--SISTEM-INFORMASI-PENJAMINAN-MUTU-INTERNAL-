@@ -25,4 +25,14 @@ class DaftarStandarMutu extends Model
         return $this->hasMany(DaftarSubStandar::class, 'daftar_standar_mutu_id');
     }
 
+    
+    public function tahun_periode()
+    {
+        return $this->belongsTo(TahunPeriode::class);
+    }
+
+    public function lembaga_akreditasi()
+    {
+        return $this->belongsTo(LembagaAkreditasi::class);
+    }
 }

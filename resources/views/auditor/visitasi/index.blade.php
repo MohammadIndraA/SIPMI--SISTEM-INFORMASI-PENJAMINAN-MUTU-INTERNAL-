@@ -45,7 +45,7 @@
                             </div>
                             <div class="">
                                 @foreach ($fakultas_prodis as $item)
-                                    <a href="#"
+                                    <a href="{{ route('auditor.standar-mutu-visitasi.index', ['fakultas' => $item->slug]) }}"
                                         class="btn btn-primary btn-sm"><span>{{ $item->fakultas_prodi }}</span> <i
                                             class="mdi mdi-arrow-right ms-1"></i> </a>
                                 @endforeach

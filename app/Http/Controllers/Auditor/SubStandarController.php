@@ -1,20 +1,19 @@
 <?php
 
-namespace App\Http\Controllers\Prodi;
+namespace App\Http\Controllers\Auditor;
 
 use App\Http\Controllers\Controller;
+use App\Models\BuktiPendukung;
 use App\Models\DaftarSubStandar;
+use App\Models\DaftarTemuanAudit;
 use App\Models\Jawaban;
 use App\Models\KategoriDokumen;
-use App\Models\LembagaAkreditasi;
-use App\Models\TahunPeriode;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Facades\Auth;
-
 class SubStandarController extends Controller
 {
-       public static function middleware()
+        public static function middleware()
     {
         return [
             new Middleware('permission:view-sub-standar', ['only' => ['index','show']]),
@@ -23,21 +22,24 @@ class SubStandarController extends Controller
       public function index(Request $request)
     {
         $lastSegment = collect(request()->segments())->last();
+       $nameSegement = collect(request()->segments())->slice(-2, 1)->first();
         $kategori_dokumens = KategoriDokumen::all();
-        $roleName = Auth::user()->getRoleNames()->first();
         $sub_standars = DaftarSubStandar::with([
                         'daftar_standar_mutu.tahun_periode',
                         'daftar_standar_mutu.lembaga_akreditasi',
-                          'poins' => function ($query) {
-                                $query->whereHas('prodis', function ($q) {
-                                    $q->where('fakultas_prodis.id', auth()->user()->fakultas_id);
+                          'poins' => function ($query) use ($nameSegement) {
+                                $query->whereHas('prodis', function ($q) use ($nameSegement) {
+                                    $q->where('fakultas_prodis.slug', $nameSegement);
                                 });
                             },
                             'poins.prodis'
                     ])->where('slug', $lastSegment)->firstOrFail();
        $tahun = $sub_standars->daftar_standar_mutu->tahun_periode;
        $lembaga = $sub_standars->daftar_standar_mutu->lembaga_akreditasi;
-        $jawabans = Jawaban::where('user_id', auth()->user()->id)->where('daftar_sub_standar_id', $sub_standars->id)->get()->keyBy('poin_id'); 
-        return view('prodi.subStandar.index', compact('kategori_dokumens', 'sub_standars', 'jawabans', 'tahun', 'lembaga'));
+        $jawabans = Jawaban::with('user')->where('daftar_sub_standar_id', $sub_standars->id)->get()->keyBy('poin_id');
+        $jawaban_auditor = DaftarTemuanAudit::where('prodi', $nameSegement)->where('daftar_sub_standar_id', $sub_standars->id)->get()->keyBy('poin_id');
+        $file_pendukungs = BuktiPendukung::where('daftar_sub_standar_id', $sub_standars->id)->get()->groupBy('poin_id');
+        // dd($file_pendukungs);
+        return view('auditor.subStandar.index', compact('kategori_dokumens', 'sub_standars', 'jawabans', 'tahun', 'lembaga', 'file_pendukungs', 'jawaban_auditor'));
     }
 }

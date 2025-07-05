@@ -9,7 +9,7 @@
                         <li class="breadcrumb-item"><a href="javascript: void(0);">Page</a></li>
                         <li class="breadcrumb-item"><a href="javascript: void(0);">Table</a></li>
                         <li class="breadcrumb-item active"><a
-                                href="{{ route('prodi.standar-mutu.index', ['fakultas' => request()->segment(3)]) }}"
+                                href="{{ route('auditor.standar-mutu.index', ['fakultas' => request()->segment(3)]) }}"
                                 style="color: darkgrey ; text-decoration: none">Standar Mutu</a>
                         </li>
                     </ol>
@@ -58,14 +58,14 @@
             let path = window.location
                 .pathname; // Contoh: "/prodi/standar-mutu/rekap-desk-evaluasi/fakultas-informatika"
 
-            if (path.includes('rekap-desk-evaluasi')) {
-                console.log("URL mengandung 'rekap-desk-evaluasi'");
+            if (path.includes('visitasi')) {
                 url =
-                    "{{ route('prodi.standar-mutu-rekap-desk-evaluasi.index', ['fakultas' => request()->segment(3)]) }}";
+                    "{{ route('auditor.standar-mutu-visitasi.index', ['fakultas' => request()->segment(3)]) }}";
             } else {
-                console.log("URL tidak mengandung 'rekap-desk-evaluasi'");
-                url = "{{ route('prodi.standar-mutu.index', ['fakultas' => request()->segment(3)]) }}";
+                url = "{{ route('auditor.standar-mutu.index', ['fakultas' => request()->segment(3)]) }}";
             }
+            console.log(url);
+
 
             $('#data-table').DataTable({
                 processing: true,

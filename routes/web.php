@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\Auditor\DeskEvaluationController as AuditorDeskEvaluationController;
 use App\Http\Controllers\Auditor\RekapDaftarTemuanController as AuditorRekapDaftarTemuanController;
+use App\Http\Controllers\Auditor\StandarMutuController as AuditorStandarMutuController;
+use App\Http\Controllers\Auditor\SubStandarController as AuditorSubStandarController;
 use App\Http\Controllers\Auditor\VisitasiController as AuditorVisitasiController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DaftarNilaiMutuController;
@@ -24,6 +26,7 @@ use App\Http\Controllers\Prodi\BuktiPendukungController as ProdiBuktiPendukungCo
 use App\Http\Controllers\Prodi\DaftarTemuanController as ProdiDaftarTemuanController;
 use App\Http\Controllers\Prodi\EvaluasiDiriController as ProdiEvaluasiDiriController;
 use App\Http\Controllers\Prodi\EvalusiDiriController;
+use App\Http\Controllers\Prodi\HasilDeskEvaluationController as ProdiHasilDeskEvaluationController;
 use App\Http\Controllers\Prodi\ProdiController;
 use App\Http\Controllers\Prodi\StandarMutuController as ProdiStandarMutuController;
 use App\Http\Controllers\Prodi\SubStandarController as ProdiSubStandarController;
@@ -192,7 +195,7 @@ Route::middleware('auth')->group(function () {
     Route::group(['prefix' => 'prodi'], function () { 
         Route::get('evaluasi-diri', [ProdiEvaluasiDiriController::class, 'index'])->name('prodi.evalusi-diri.index');
         Route::get('standar-mutu/{fakultas}', [ProdiStandarMutuController::class, 'index'])->name('prodi.standar-mutu.index');
-        Route::get('substandar/{fakultas}/poin/{id}', [ProdiSubStandarController::class, 'index'])->name('prodi.substandar.index');
+        Route::get('substandar/{fakultas}/{substandar}', [ProdiSubStandarController::class, 'index'])->name('prodi.substandar.index');
         // bukti pendukung 
         Route::get('/bukti-pendukungs', [ProdiBuktiPendukungController::class, 'index'])->name('prodi.bukti-pendukung.index');
         Route::post('/bukti-pendukung-store', [ProdiBuktiPendukungController::class, 'store'])->name('prodi.bukti-pendukung.store');
@@ -201,9 +204,18 @@ Route::middleware('auth')->group(function () {
         Route::post('/daftar-temuan-store', [ProdiDaftarTemuanController::class, 'store'])->name('prodi.daftar-temuan.store');
         // rekap desk evaluasi
         Route::get('/rekap-desk-evaluasis',  [ProdiEvaluasiDiriController::class, 'index'])->name('prodi.rekap-desk-evaluasi.index');
+        Route::get('standar-mutu/{fakultas}/rekap-desk-evaluasi', [ProdiStandarMutuController::class, 'index'])->name('prodi.standar-mutu-rekap-desk-evaluasi.index');
+        Route::get('hasil-desk-evaluasi/{fakultas}/{substandar}', [ProdiHasilDeskEvaluationController::class, 'index'])->name('prodi.hasil-desk-evaluasi.index');
+
+
         // Rencana Tindak Lanjut
         Route::post('/rencana-tindak-lanjuts', [ProdirencanaTindakLanjutController::class, 'store'])->name('prodi.rencana-tindak-lanjut.store');
-
+        // Rencana Tindak Lanjut
+        Route::post('/simpan-jawaban-substandar', [ProdiEvaluasiDiriController::class, 'simpan_jawaban'])->name('prodi.simpan-jawaban-substandar.store');
+        // Quiz
+        Route::get('/quiz/{quizId}', function () {
+                    return view('quiz');
+                })->name('prodi.quiz.index');
     } );
 
 
@@ -214,6 +226,14 @@ Route::middleware('auth')->group(function () {
         Route::get('rekap-daftar-temuans', [AuditorRekapDaftarTemuanController::class, 'index'])->name('auditor.rekap-daftar-temuan.index');
         // Visitasi
         Route::get('visitasis', [AuditorVisitasiController::class, 'index'])->name('auditor.visitasi.index');
+        Route::get('visitasi/{fakultas}/{substandar}', [AuditorSubStandarController::class, 'index'])->name('auditor.substandar-visitasi.index');
+        Route::get('visitasi/{fakultas}/{substandar}', [AuditorVisitasiController::class, 'data'])->name('auditor.substandar-visitasi.index');
+
+        Route::get('standar-mutu/{fakultas}', [AuditorStandarMutuController::class, 'index'])->name('auditor.standar-mutu.index');
+        Route::get('standar-mutu/{fakultas}/visitasi', [AuditorStandarMutuController::class, 'index'])->name('auditor.standar-mutu-visitasi.index');
+        Route::get('substandar/{fakultas}/{substandar}', [AuditorSubStandarController::class, 'index'])->name('auditor.substandar.index');
+        Route::post('/simpan-jawaban-substandar-audit', [AuditorRekapDaftarTemuanController::class, 'simpan_jawaban_audit'])->name('auditor.simpan-jawaban-substandar-audit.store');
+
     });
     // logout
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');

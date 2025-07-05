@@ -21,7 +21,14 @@ class BuktiPendukungController extends Controller
       public function index(Request $request)
     {
         if ($request->ajax()) {
-            $fakultasProdi = BuktiPendukung::with('kategori_dokumen')->orderBy('id', 'desc');
+            $sub_standar = $request->query('sub_standar');
+            $poin_id = $request->query('poin_id');
+           $fakultasProdi = BuktiPendukung::with('kategori_dokumen')
+                            ->where('daftar_sub_standar_id', $sub_standar)
+                            ->when($poin_id, function ($query) use ($poin_id) {
+                                return $query->where('poin_id', $poin_id);
+                            })
+                            ->orderByDesc('id');
             return datatables($fakultasProdi)
                 ->addIndexColumn()
                 ->editColumn('kategori_dokumen', function ($row) {
@@ -47,6 +54,8 @@ class BuktiPendukungController extends Controller
                 $data['file_pendukung'] = uploadDokumen('dokumen/pendukung', $request->file('file_pendukung'));
             }
             $data['unit_pengunggah'] = auth()->user()->getRoleNames()->first();
+            $data['poin_id'] = $request->poin_id_pendukung;
+            $data['daftar_sub_standar_id'] = $request->daftar_sub_standar_id_pendukung;
             $bukti_pendukung = BuktiPendukung::create($data);
             return response()->json([
                 "status" => true,

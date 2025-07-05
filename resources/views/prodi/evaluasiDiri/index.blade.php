@@ -41,8 +41,15 @@
                                         </a>
 
                                         <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                            <a class="dropdown-item"
-                                                href="{{ route('prodi.standar-mutu.index', ['fakultas' => $fakultas->fakultas_prodi]) }}">{{ $fakultas->fakultas_prodi }}</a>
+                                            @if (request()->is('*rekap-desk-evaluasi*'))
+                                                <a class="dropdown-item"
+                                                    href="{{ route('prodi.standar-mutu-rekap-desk-evaluasi.index', ['fakultas' => $fakultas->slug]) }}">
+                                                    {{ $fakultas->fakultas_prodi }}
+                                                </a>
+                                            @else
+                                                <a class="dropdown-item"
+                                                    href="{{ route('prodi.standar-mutu.index', ['fakultas' => $fakultas->slug]) }}">{{ $fakultas->fakultas_prodi }}</a>
+                                            @endif
                                         </div>
                                     </div>
                                 </div>

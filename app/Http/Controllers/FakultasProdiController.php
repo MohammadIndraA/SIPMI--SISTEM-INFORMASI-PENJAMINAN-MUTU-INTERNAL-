@@ -7,7 +7,7 @@ use App\Models\FakultasProdi;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\Middleware;
-
+use Illuminate\Support\Str;
 class FakultasProdiController extends Controller
 {
     public static function middleware()
@@ -66,7 +66,9 @@ class FakultasProdiController extends Controller
     {
         try {
             // Data sudah tervalidasi melalui Fakultas ProdiRequest
-            $fakultasProdi = FakultasProdi::create($request->validated());
+            $data = $request->validated();
+            $data['slug'] = Str::slug($request->fakultas_prodi, '-');
+           $fakultasProdi = FakultasProdi::create($data);
             return response()->json([
                 "status" => true,
                 "data" => $fakultasProdi,
@@ -96,7 +98,7 @@ class FakultasProdiController extends Controller
         try {
             $fakultasProdi = FakultasProdi::findOrFail($id);
             $data = $request->validated();  
-
+            $data['slug'] = Str::slug($request->fakultas_prodi, '-');
             $fakultasProdi->update($data); 
 
             return response()->json([

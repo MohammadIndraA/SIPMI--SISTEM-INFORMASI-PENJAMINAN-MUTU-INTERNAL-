@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Prodi;
+namespace App\Http\Controllers\Auditor;
 
 use App\Http\Controllers\Controller;
 use App\Models\DaftarStandarMutu;
@@ -8,7 +8,6 @@ use App\Models\LembagaAkreditasi;
 use App\Models\TahunPeriode;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\Middleware;
-use Illuminate\Support\Facades\Log;
 
 class StandarMutuController extends Controller
 {
@@ -47,14 +46,13 @@ class StandarMutuController extends Controller
                             if ($daftar_standar->daftar_sub_standars && $daftar_standar->daftar_sub_standars->count() > 0) {
                                 foreach ($daftar_standar->daftar_sub_standars as $daftar_sub_standar) {
                                     $url = "";
-                                    if(request()->is('*rekap-desk-evaluasi*')) {
-                                        // Jika URL mengandung 'rekap-desk-evaluasi', tambahkan tambahan path
-                                         $url = url('/prodi/hasil-desk-evaluasi/' . request()->segment(3) . '/' . $daftar_sub_standar->slug);
-                                        // $url = url('/prodi/substandar/' . request()->segment(3) . '/' . $daftar_sub_standar->slug);
-                                        } else {
-                                        // URL normal
-                                        $url = url('/prodi/substandar/' . request()->segment(3) . '/' . $daftar_sub_standar->slug);
-                                    }
+                                       if(request()->is('*visitasi*')) {
+                                           // Jika URL mengandung 'rekap-desk-evaluasi', tambahkan tambahan path
+                                            $url = url('/auditor/visitasi/' . request()->segment(3) . '/' . $daftar_sub_standar->slug);
+                                           } else {
+                                           // URL normal
+                                           $url = url('/auditor/substandar/' . request()->segment(3) . '/' . $daftar_sub_standar->slug);
+                                       }
                             $data .= '
                                         <div class="inline col-12 position-relative">
                                             <details open>
@@ -73,23 +71,6 @@ class StandarMutuController extends Controller
                                                 </div>
                                             </details>
                                         </div>';
-                                    // if ($daftar_sub_standar->poins && $daftar_sub_standar->poins->count() > 0) {
-                                    //     $data .= '<ul class="ms-5 ps-2">'; // Buka <ul> di sini
-                                    //     foreach ($daftar_sub_standar->poins as $poin) {
-                                    //         $data .= '<div class="inline col-12" style="display: flex; align-items: center;">'; // Buka <div> untuk setiap poin
-                                    //         $data .= '<li class="col-md-10"><p class="">' . $poin->nama_poin . '</p><hr></li>';
-                                    //        $data .= '<div class="col-md-2">
-                                    //                     <a href="/prodi/substandar/' . request()->segment(3) .'/poin/' . $poin->id . '" 
-                                    //                     class="btn btn-primary btn-sm float-end mb-3"  
-                                    //                     style="cursor: pointer;">
-                                    //                     Pilih <i class="mdi mdi-arrow-right ms-1"></i>
-                                    //                     </a>
-                                    //                 </div>';
-                                    //         $data .= '</div>'; // Tutup <div> untuk setiap poin
-                                    //     }
-                                    //     $data .= '</ul>'; // Tutup <ul> di sini
-                                    // }
-                                    // $data .= '</details>';
                                 }
                             }
                 
@@ -104,6 +85,6 @@ class StandarMutuController extends Controller
         }
         $tahunPeriodes = TahunPeriode::all();
         $lembagaAkreditasis = LembagaAkreditasi::all();
-        return view('prodi.standarMutu.index', compact('tahunPeriodes', 'lembagaAkreditasis'));
+        return view('auditor.standarMutu.index', compact('tahunPeriodes', 'lembagaAkreditasis'));
     }
 }

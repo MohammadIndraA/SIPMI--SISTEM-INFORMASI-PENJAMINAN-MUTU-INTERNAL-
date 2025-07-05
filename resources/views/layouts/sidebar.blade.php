@@ -149,7 +149,7 @@
                 @can('view-rekap-desk-evaluasi')
                     <li>
                         <a
-                            href=" {{ auth()->user()->hasRole('Admin') ? route('rekap-desk-evaluasi.index') : route('prodi.evalusi-diri.index') }}">{{ auth()->user()->hasRole('Admin') ? 'Rekap' : 'Hasil' }}
+                            href=" {{ auth()->user()->hasRole('Admin') ? route('rekap-desk-evaluasi.index') : route('prodi.rekap-desk-evaluasi.index') }}">{{ auth()->user()->hasRole('Admin') ? 'Rekap' : 'Hasil' }}
                             Desk Evaluasi</a>
                     </li>
                 @endcan

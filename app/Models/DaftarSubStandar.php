@@ -23,4 +23,5 @@ class DaftarSubStandar extends Model
     {
         return $this->hasMany(Poin::class,'daftar_sub_standar_id');
     }
+
 }

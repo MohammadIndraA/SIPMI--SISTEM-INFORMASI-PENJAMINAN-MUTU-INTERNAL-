@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Prodi;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\FakultasProdiRequest;
+use App\Models\DaftarTemuanAudit;
 use App\Models\FakultasProdi;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\Middleware;
@@ -20,19 +21,21 @@ class DaftarTemuanController extends Controller
         public function index(Request $request)
     {
         if ($request->ajax()) {
-            $fakultasProdi = FakultasProdi::orderBy('id', 'desc');
-            return datatables($fakultasProdi)
+            $daftarTemuanAudit = DaftarTemuanAudit::with('poin')->orderBy('id', 'desc');
+            return datatables($daftarTemuanAudit)
                 ->addIndexColumn()
-              ->editColumn('fakultas', function($row) {
+              ->editColumn('daftar_sub_standar_id', function($row) {
                     $data = "";
-                    $data .= $row->fakultas_prodi;
+                    $data .= $row->poin->nama_poin;
                     $data .= "<br>";
-                   $data .= '<button onclick="rencanaTindakLanjut(\'' . route('prodi.rencana-tindak-lanjut.store', $row->id) . '\')" class="btn btn-warning btn-flat btn-sm mt-2" title="Edit">
+                   if ($row->status == "Terverifikasi") {
+                     $data .= '<button onclick="rencanaTindakLanjut(\'' . route('prodi.rencana-tindak-lanjut.store', $row->id) . '\')" class="btn btn-warning btn-flat btn-sm mt-2" title="Edit">
                                 <i class="dripicons-document-edit"></i> Rencana Tindak Lanjut 
                             </button>';
+                   }
                     return $data;
                 })
-                ->rawColumns(['fakultas'])
+                ->rawColumns(['daftar_sub_standar_id'])
                 ->make(true);
         }
         return view('prodi.daftarTemuan.index');

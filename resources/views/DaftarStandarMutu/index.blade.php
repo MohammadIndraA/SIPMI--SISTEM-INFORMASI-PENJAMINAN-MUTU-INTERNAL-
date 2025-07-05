@@ -166,8 +166,8 @@
                         rows="4"></textarea>
                 </div>
             </div>
-            <div class="row mb-1 sub-standar d-none">
-                <label for="jenis_perhitungan" class="col-3 col-form-label">Jenis Prhitungan <sop class="text-danger">
+            <div class="row mb-1" hidden id="wrap_jenis_perhitungan">
+                <label for="jenis_perhitungan" class="col-3 col-form-label">Jenis Perhitungan <sop class="text-danger">
                         *
                     </sop>
                 </label>
@@ -177,7 +177,7 @@
                     </select>
                 </div>
             </div>
-            <div class="row mb-1 sub-standar d-none">
+            <div class="row mb-1" hidden id="wrap_isian_rumus">
                 <label for="isian_rumus" class="col-3 col-form-label">Isian Rumus <sop class="text-danger">
                         *
                     </sop>
@@ -187,6 +187,24 @@
                         <option value="IPK">IPK</option>
                         <option value="IPS">IPS</option>
                     </select>
+                </div>
+            </div>
+            <div class="row mb-1 sub-standar d-none">
+                <label for="isian_rumus" class="col-3 col-form-label">Prodi<sop class="text-danger">
+                        *
+                    </sop>
+                </label>
+                <div class="col-9">
+                    <div class="form-check form-check-inline">
+                        @foreach ($prodis as $item)
+                            <label class="form-check-label mx-3 my-1" for="prodi-{{ $item->id }}"> <input
+                                    type="checkbox" name="prodi[]" class="form-check-input form-check-lg"
+                                    id="prodi-{{ $item->id }}" value="{{ $item->id }}"
+                                    {{ old('prodi.' . $loop->index) ? 'checked' : '' }}>
+                                {{ $item->fakultas_prodi }}</label>
+                        @endforeach
+
+                    </div>
                 </div>
             </div>
         </div>
@@ -374,11 +392,17 @@
             // cek jika standar
             if (type == 'daftar-standar-mutu') {
                 $('#sub_standar').hide();
+                $('#poin').hide();
             } else if (type == 'daftar-standar') {
                 $('#standar').hide();
+                $('#poin').hide();
+                $('#wrap_isian_rumus').hide();
+                $('#wrap_jenis_perhitungan').hide();
             } else if (type == 'daftar-sub-standar') {
                 $('#standar').hide();
                 $('#sub_standar').hide();
+                $('#wrap_isian_rumus').hide();
+                $('#wrap_jenis_perhitungan').hide();
             }
             // Deklarasi variabel url di luar blok if-else
             let url;
@@ -468,8 +492,6 @@
                 },
                 dataType: 'json',
                 success: function(res) {
-                    console.log(res.data);
-
                     $('#modal-title').html("Edit Data Daftar Mutu");
                     $('#modal-form').modal('show');
                     $('#id').val(res.data.id);
@@ -506,9 +528,15 @@
                         $('#jenis_perhitungan').val(res.data.jenis_perhitungan);
                         $(".standar").removeClass("d-none");
                         $(".sub-standar").removeClass("d-none");
+                        res.data.prodis.forEach(function(prodi) {
+                            $('#prodi-' + prodi.id).prop('checked', true);
+                        });
+                        console.log(res.data.prodis);
+
                     }
                     $('#deskripsi').val(res.data.deskripsi);
                     $('#myForm').find('.summernote').summernote('code', res.data.nama_standar_mutu);
+
                 },
                 error: function(data) {
                     console.log(data.errors);

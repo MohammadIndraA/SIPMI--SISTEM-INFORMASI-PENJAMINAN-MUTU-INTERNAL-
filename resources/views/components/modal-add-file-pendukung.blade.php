@@ -10,6 +10,9 @@
                     id="myFormFilePendukung">
                     <div class="modal-body">
                         <input type="hidden" name="id" id="id">
+                        <input type="hidden" name="poin_id_pendukung" id="poin_id_pendukung">
+                        <input type="hidden" name="daftar_sub_standar_id_pendukung"
+                            id="daftar_sub_standar_id_pendukung">
                         <div class="row mb-1">
                             <label for="nama" class="col-3 col-form-label"><b>Nama File Pendukung</b>
                                 <sop class="text-danger">*
