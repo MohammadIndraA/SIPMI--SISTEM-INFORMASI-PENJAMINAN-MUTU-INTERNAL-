@@ -57,22 +57,15 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-sm-4 col-md-3 d-flex justify-content-end text-end item-button h-50 pt-2">
-                            <a href="#" class="btn btn-primary mb-2"
-                                onClick="addUser('{{ route('evaluasi-diri.store') }}')"><i
-                                    class="mdi mdi-plus-circle me-2"></i>Tambah Target Nilai Mutu</a>
-                        </div>
                     </div>
                     <div class="table-responsive">
                         <table class="table table-borderless nowrap" id="data-table">
                             <thead class="">
                                 <tr>
                                     <th style="width: 10px">#</th>
-                                    <th width="40%">Program Studi</th>
-                                    <th>Target Nilai</th>
-                                    <th>Nilai Evaluasi</th>
-                                    <th>Belum Menjawab</th>
+                                    <th width="60%">Program Studi</th>
                                     <th>Sudah Menjawab</th>
+                                    <th>Belum Menjawab</th>
                                 </tr>
                             </thead>
                         </table>
@@ -114,32 +107,12 @@
                         name: 'fakultas_prodi',
                     },
                     {
-                        data: 'target_nilai_mutu',
-                        name: 'target_nilai_mutu',
-                        render: function(data, type, row) {
-                            return data ?? 0;
-                        }
-                    },
-                    {
-                        data: 'nilai_evaluasi',
-                        name: 'nilai_evaluasi',
-                        render: function(data, type, row) {
-                            return data ?? 0;
-                        }
-                    },
-                    {
                         data: 'sudah_menjawab',
                         name: 'sudah_menjawab',
-                        render: function(data, type, row) {
-                            return data ?? 0;
-                        }
                     },
                     {
                         data: 'belum_menjawab',
                         name: 'belum_menjawab',
-                        render: function(data, type, row) {
-                            return data ?? 0;
-                        }
                     },
 
                 ]

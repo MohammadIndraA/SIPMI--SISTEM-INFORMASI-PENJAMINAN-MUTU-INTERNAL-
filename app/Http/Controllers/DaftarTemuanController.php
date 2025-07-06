@@ -20,18 +20,24 @@ class DaftarTemuanController extends Controller
 
     public function index(Request $request)
     {
-
+     
         if ($request->ajax()) {
             $query = DB::table('fakultas_prodis')
             ->leftJoin('daftar_temuans', 'fakultas_prodis.id', '=', 'daftar_temuans.fakultas_prodi_id')
             ->leftJoin('evaluasi_diris', 'fakultas_prodis.id', '=', 'evaluasi_diris.fakultas_prodi_id')
-            ->select('fakultas_prodis.*', 'daftar_temuans.jumlah_temuan', 'daftar_temuans.jumlah_temuan_disetujui')
-                ->when($request->filled('tahun_periode_id'), function ($query) use ($request) {
-                $query->where('tahun_periode_id', $request->tahun_periode_id);
+            ->select(
+                'fakultas_prodis.*',
+                DB::raw('COUNT(daftar_temuans.id) as total_temuan'), // semua temuan
+                DB::raw('SUM(IF(daftar_temuans.jumlah_temuan_disetujui = 1, 1, 0)) as total_temuan_disetujui'), // temuan yang benar-benar disetujui
+                DB::raw('MAX(daftar_temuans.jumlah_temuan) as jumlah_temuan') // ambil salah satu jika ada banyak
+            )
+            ->when($request->filled('tahun_periode_id'), function ($q) use ($request) {
+                $q->where('daftar_temuans.tahun_periode_id', $request->tahun_periode_id);
             })
-            ->when($request->filled('lembaga_akreditasi_id'), function ($query) use ($request) {
-                $query->where('lembaga_akreditasi_id', $request->lembaga_akreditasi_id);
-            });        
+            ->when($request->filled('lembaga_akreditasi_id'), function ($q) use ($request) {
+                $q->where('daftar_temuans.lembaga_akreditasi_id', $request->lembaga_akreditasi_id);
+            })
+            ->groupBy('fakultas_prodis.id');      
             return datatables($query)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {

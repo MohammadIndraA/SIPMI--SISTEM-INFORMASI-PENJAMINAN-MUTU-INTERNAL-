@@ -50,7 +50,7 @@
             $('#data-table').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: "{{ route('prodi.daftar-temuan.index') }}",
+                ajax: "{{ route('auditor.rekap-daftar-temuan.index') }}",
                 columns: [{
                         data: 'DT_RowIndex',
                         searchable: false,
@@ -58,11 +58,27 @@
                     },
                     {
                         data: 'fakultas_prodi',
-                        name: 'fakultas_prodi'
+                        name: 'fakultas_prodi',
+                        searchable: false,
+                        sortable: false
                     },
                     {
-                        data: 'fakultas_prodi',
-                        name: 'fakultas_prodi'
+                        data: 'total_temuan',
+                        name: 'total_temuan',
+                        searchable: false,
+                        sortable: false,
+                        render: function(data, type, row) {
+                            var temuan = "";
+                            if (row.total_temuan == 0) {
+                                temuan =
+                                    '<span class="text-success text-center">Tidak Ada Temuan</span>';
+                            } else {
+                                temuan = "<span class='text-danger text-center'> " + row
+                                    .total_temuan +
+                                    " Temuan</span>";
+                            }
+                            return temuan;
+                        }
                     },
 
                 ]

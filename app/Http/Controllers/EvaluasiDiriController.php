@@ -1,11 +1,16 @@
 <?php
 
 namespace App\Http\Controllers;
+
+use App\Models\FakultasProdi;
+use App\Models\Jawaban;
 use App\Models\LembagaAkreditasi;
 use App\Models\TahunPeriode;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Facades\DB;
+
+use function Illuminate\Log\log;
 
 class EvaluasiDiriController extends Controller
 {
@@ -14,6 +19,27 @@ class EvaluasiDiriController extends Controller
         return [
             new Middleware('permission:view-evaluasi-diri', ['only' => ['index','show']]),
         ];
+    }
+   private function getJumlahSudahMenjawab($fakultas_prodi_id)
+    {
+        // Ambil poin_id dari tabel poin_prodi sesuai fakultas_prodi_id
+        $poin_ids = DB::table('poin_prodi')
+            ->where('fakultas_prodi_id', $fakultas_prodi_id)
+            ->pluck('poin_id');
+
+        if ($poin_ids->isEmpty()) {
+            return 0;
+        }
+
+        // Ambil jawaban yang:
+        // - poin_id ada di dalam $poin_ids
+        // - dan user yang membuatnya memiliki fakultas_id = $fakultas_prodi_id
+        $data = Jawaban::join('users', 'jawabans.user_id', '=', 'users.id')
+            ->whereIn('jawabans.poin_id', $poin_ids)
+            ->where('users.fakultas_id', $fakultas_prodi_id)
+            ->count();
+        log()->info($data);
+        return $data;
     }
 
 
@@ -33,6 +59,16 @@ class EvaluasiDiriController extends Controller
             });        
             return datatables($query)
                 ->addIndexColumn()
+                ->addColumn('sudah_menjawab', function ($row) {
+                    // log($row);
+                        return $this->getJumlahSudahMenjawab($row->id);
+                    })
+                    ->addColumn('belum_menjawab', function ($row) {
+                        $total = DB::table('poin_prodi')->where('fakultas_prodi_id', $row->id)->count();
+                        $sudah = $this->getJumlahSudahMenjawab($row->id);
+                        return max(0, $total - $sudah);
+                    })
+                ->rawColumns(['sudah_menjawab', 'belum_menjawab'])
                 ->make(true);
         }
         $tahunPeriodes = TahunPeriode::all();

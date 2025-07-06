@@ -145,7 +145,7 @@
                     </select>
                 </div>
             </div>
-            <div class="row mb-1 sub-standar d-none">
+            <div class="row mb-1 sub-standar d-none" hidden>
                 <label for="jenjang" class="col-3 col-form-label">Jenjang <sop class="text-danger">
                         *
                     </sop>
@@ -477,6 +477,8 @@
             } else if (type == 'daftar-sub-standar') {
                 urlEdit = `{{ route('daftar-sub-standar.edit') }}`
                 url = `{{ route('daftar-sub-standar.update', 'id') }}`
+                $('#wrap_isian_rumus').hide();
+                $('#wrap_jenis_perhitungan').hide();
             } else if (type == "poin") {
                 urlEdit = `{{ route('poin.edit') }}`
                 url = `{{ route('poin.update', 'id') }}`

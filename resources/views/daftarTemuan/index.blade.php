@@ -107,12 +107,32 @@
                         name: 'fakultas_prodi',
                     },
                     {
-                        data: 'jumlah_temuan',
-                        name: 'jumlah_temuan',
+                        data: 'total_temuan',
+                        name: 'total_temuan',
+                        render: function(data, type, row) {
+                            var temuan = "";
+                            if (row.total_temuan == 0) {
+                                temuan = '<span class="text-success">Tidak Ada Temuan</span>';
+                            } else {
+                                temuan = "<span class='text-danger'>Ada " + row.total_temuan +
+                                    " Temuan</span>";
+                            }
+                            return temuan;
+                        }
                     },
                     {
-                        data: 'jumlah_temuan_disetujui',
-                        name: 'jumlah_temuan_disetujui',
+                        data: 'total_temuan_disetujui',
+                        name: 'total_temuan_disetujui',
+                        render: function(data, type, row) {
+                            var temuan = "";
+                            if (row.total_temuan_disetujui == 0) {
+                                temuan = 'Tidak Ada Temuan Disetujui';
+                            } else {
+                                temuan = "<span class='text-success'> " + row
+                                    .total_temuan_disetujui + " Temuan Disetujui</span>";
+                            }
+                            return temuan;
+                        }
                     },
 
                 ]

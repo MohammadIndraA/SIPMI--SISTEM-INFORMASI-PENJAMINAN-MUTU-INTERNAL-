@@ -41,7 +41,7 @@ class HasilDeskEvaluationController extends Controller
         $jawabans = Jawaban::with('user')->where('daftar_sub_standar_id', $sub_standars->id)->get()->keyBy('poin_id');
         $jawaban_auditor = DaftarTemuanAudit::where('prodi', $nameSegement)->where('daftar_sub_standar_id', $sub_standars->id)->get()->keyBy('poin_id');
         $file_pendukungs = BuktiPendukung::where('daftar_sub_standar_id', $sub_standars->id)->get()->groupBy('poin_id');
-        // dd($file_pendukungs);
+        // dd($jawaban_auditor);
         return view('prodi.rekapDeskEvaluasi.index', compact('kategori_dokumens', 'sub_standars', 'jawabans', 'tahun', 'lembaga', 'file_pendukungs', 'jawaban_auditor'));
     }
 }

@@ -126,8 +126,8 @@
                     //     name: 'fakultas_prodi'
                     // },
                     {
-                        data: 'temuan',
-                        name: 'temuan'
+                        data: 'jumlah_temuan',
+                        name: 'jumlah_temuan'
                     },
 
                 ]

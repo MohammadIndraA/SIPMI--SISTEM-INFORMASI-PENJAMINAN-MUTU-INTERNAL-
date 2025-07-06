@@ -58,19 +58,26 @@
                             </div>
                         </div>
                     </div>
-                    <div class="table-responsive">
-                        <table class="table table-borderless nowrap" id="data-table">
-                            <thead class="">
-                                <tr>
-                                    <th style="width: 10px">#</th>
-                                    <th width="40%">Program Studi</th>
-                                    <th>Target Nilai</th>
-                                    <th>Nilai Evalusi Diri</th>
-                                    <th>Nilai Desk Evaluasi</th>
-                                </tr>
-                            </thead>
-                        </table>
-                    </div>
+                    @if ($tahunPeriodes->count() > 0)
+                        <div class="alert alert-warning" role="alert">
+                            Fitur Dalam Tahap Pengembangan <a href="#" class="alert-link">Terimakasih</a>
+                        </div>
+                    @else
+                        <div class="table-responsive">
+                            <table class="table table-borderless nowrap" id="data-table">
+                                <thead class="">
+                                    <tr>
+                                        <th style="width: 10px">#</th>
+                                        <th width="40%">Program Studi</th>
+                                        <th>Target Nilai</th>
+                                        <th>Nilai Evalusi Diri</th>
+                                        <th>Nilai Desk Evaluasi</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    @endif
+
                 </div> <!-- end card-body-->
             </div> <!-- end card-->
         </div> <!-- end col -->

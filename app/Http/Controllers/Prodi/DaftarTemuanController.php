@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Prodi;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\FakultasProdiRequest;
+use App\Models\DaftarTemuan;
 use App\Models\DaftarTemuanAudit;
 use App\Models\FakultasProdi;
 use Illuminate\Http\Request;
@@ -21,14 +22,14 @@ class DaftarTemuanController extends Controller
         public function index(Request $request)
     {
         if ($request->ajax()) {
-            $daftarTemuanAudit = DaftarTemuanAudit::with('poin')->orderBy('id', 'desc');
+            $daftarTemuanAudit = DaftarTemuan::with('poin')->orderBy('id', 'desc');
             return datatables($daftarTemuanAudit)
                 ->addIndexColumn()
               ->editColumn('daftar_sub_standar_id', function($row) {
                     $data = "";
                     $data .= $row->poin->nama_poin;
                     $data .= "<br>";
-                   if ($row->status == "Terverifikasi") {
+                   if ($row->status == "disetujui") {
                      $data .= '<button onclick="rencanaTindakLanjut(\'' . route('prodi.rencana-tindak-lanjut.store', $row->id) . '\')" class="btn btn-warning btn-flat btn-sm mt-2" title="Edit">
                                 <i class="dripicons-document-edit"></i> Rencana Tindak Lanjut 
                             </button>';

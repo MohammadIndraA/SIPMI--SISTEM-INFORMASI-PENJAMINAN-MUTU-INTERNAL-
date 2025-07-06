@@ -228,6 +228,8 @@ Route::middleware('auth')->group(function () {
         Route::get('visitasis', [AuditorVisitasiController::class, 'index'])->name('auditor.visitasi.index');
         Route::get('visitasi/{fakultas}/{substandar}', [AuditorSubStandarController::class, 'index'])->name('auditor.substandar-visitasi.index');
         Route::get('visitasi/{fakultas}/{substandar}', [AuditorVisitasiController::class, 'data'])->name('auditor.substandar-visitasi.index');
+        Route::post('/simpan-jawaban-visitasi', [AuditorVisitasiController::class, 'simpan_visitasi_auditor'])->name('auditor.simpan-jawaban-visitasi.store');
+
 
         Route::get('standar-mutu/{fakultas}', [AuditorStandarMutuController::class, 'index'])->name('auditor.standar-mutu.index');
         Route::get('standar-mutu/{fakultas}/visitasi', [AuditorStandarMutuController::class, 'index'])->name('auditor.standar-mutu-visitasi.index');

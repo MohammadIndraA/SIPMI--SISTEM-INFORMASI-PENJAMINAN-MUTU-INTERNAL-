@@ -63,11 +63,15 @@
                                     <h5>STANDAR MUTU</h5>
                                 </strong>
                             </div>
-                            <form id="jawabanForm" action="{{ route('auditor.simpan-jawaban-substandar-audit.store') }}"
+                            <form id="jawabanForm" action="{{ route('auditor.simpan-jawaban-visitasi.store') }}"
                                 method="POST">
                                 @csrf
                                 @if ($sub_standars->poins && $sub_standars->poins->count() > 0)
                                     <input type="hidden" name="sub_standar_id" value="{{ $sub_standars->id }}">
+                                    <input type="hidden" name="tahun_periode_id"
+                                        value="{{ $sub_standars->daftar_standar_mutu->tahun_periode_id }}">
+                                    <input type="hidden" name="lembaga_akreditasi_id"
+                                        value="{{ $sub_standars->daftar_standar_mutu->lembaga_akreditasi_id }}">
                                     @foreach ($sub_standars->poins as $index => $item)
                                         <input type="hidden" name="poin_id" value="{{ $item->id }}">
                                         <input type="hidden" name="prodi_fakultas" value="{{ request()->segment(3) }}">
@@ -175,7 +179,7 @@
                                                 </label>
                                                 <div class="col-10">
                                                     <textarea class="form-control" disabled id="Temuan" name="temuan[{{ $item->id }}]"
-                                                        value="{{ old('Temuan') }}" placeholder="-" rows="3">{{ old('temuan.' . $item->id, $jawaban_auditor->get($item->id)->temuan ?? '') }}</textarea>
+                                                        value="{{ old('Temuan') }}" placeholder="-" rows="2">{{ old('temuan.' . $item->id, $jawaban_auditor->get($item->id)->temuan ?? '') }}</textarea>
                                                 </div>
                                             </div>
                                             <div class="row mb-1">
@@ -183,7 +187,41 @@
                                                 </label>
                                                 <div class="col-10">
                                                     <textarea class="form-control" disabled id="Rekomendasi" name="rekomendasi[{{ $item->id }}]" placeholder="-"
-                                                        rows="3"> {{ old('rekomendasi.' . $item->id, $jawaban_auditor->get($item->id)->rekomendasi ?? '') }} </textarea>
+                                                        rows="2"> {{ old('rekomendasi.' . $item->id, $jawaban_auditor->get($item->id)->rekomendasi ?? '') }} </textarea>
+                                                </div>
+                                            </div>
+                                            <hr>
+                                            <span><span class="mb-1"><strong>Visitasi :</strong></span></span>
+                                            <div class="row mb-1">
+                                                <label for="Status" class="col-2 col-form-label"><b>Status</b>
+                                                </label>
+                                                <div class="col-10">
+                                                    <div class="form-check form-check-inline">
+                                                        <label class="form-check-label ml-5 my-1" for="disetujui">
+                                                            <input type="radio"
+                                                                name="status_visitasi[{{ $item->id }}]"
+                                                                class="form-check-input form-check-lg" id="disetujui "
+                                                                {{ old('status_visitasi.' . $item->id, $jawaban_visitasi->get($item->id)->jumlah_temuan_disetujui ?? '') == '1' ? 'checked' : '' }}
+                                                                value="disetujui">
+                                                            Disetujui </label>
+                                                        <label class="form-check-label mx-4 my-1" for="tidak disetujui">
+                                                            <input type="radio"
+                                                                name="status_visitasi[{{ $item->id }}]"
+                                                                class="form-check-input form-check-lg"
+                                                                {{ old('status_visitasi.' . $item->id, $jawaban_visitasi->get($item->id)->jumlah_temuan_disetujui ?? '') == '0' ? 'checked' : '' }}
+                                                                id="tidak disetujui " value="tidak disetujui">
+                                                            Tidak Disetujui </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row mb-1">
+                                                <label for="jumlah_temuan" class="col-2 col-form-label"><b>Temuan</b>
+                                                </label>
+                                                <div class="col-10">
+                                                    <textarea class="form-control" id="jumlah_temuan" name="jumlah_temuan[{{ $item->id }}]" placeholder="-"
+                                                        rows="3">
+                                                    {{ old('jumlah_temuan.' . $item->id, $jawaban_visitasi->get($item->id)->jumlah_temuan ?? '') }}     
+                                                    </textarea>
                                                 </div>
                                             </div>
                                         </div>
@@ -192,16 +230,6 @@
                                 @else
                                     <div class="alert alert-warning">Belum ada poin untuk sub standar ini.</div>
                                 @endif
-                                <div class="card p-3">
-                                    <span><span class="mb-1"><strong>Visitasi :</strong></span></span>
-                                    <div class="row mb-1">
-                                        <label for="temuan" class="col-2 col-form-label"><b>Temuan</b>
-                                        </label>
-                                        <div class="col-10">
-                                            <textarea class="form-control" id="temuan" name="temuan" placeholder="-" rows="3"> </textarea>
-                                        </div>
-                                    </div>
-                                </div>
                                 <div class="d-flex justify-content-between mt-3">
                                     <button type="button" class="btn btn-secondary btn-sm"
                                         onclick="window.history.back()">
