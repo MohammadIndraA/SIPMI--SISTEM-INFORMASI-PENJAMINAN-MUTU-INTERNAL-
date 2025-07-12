@@ -10,6 +10,7 @@ use App\Models\DaftarTemuanAudit;
 use App\Models\FakultasProdi;
 use App\Models\Jawaban;
 use App\Models\KategoriDokumen;
+use App\Models\PengaturanPeriode;
 use App\Models\StandarNasional;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\Middleware;
@@ -28,7 +29,8 @@ class VisitasiController extends Controller
     {
         $standar_nasionals = StandarNasional::all();
         $fakultas_prodis = FakultasProdi::all();
-        return view('auditor.visitasi.index', compact('standar_nasionals', 'fakultas_prodis'));
+        $periode = PengaturanPeriode::first(['awal_periode_visitasi','akhir_periode_visitasi']);
+        return view('auditor.visitasi.index', compact('standar_nasionals', 'fakultas_prodis', 'periode'));
     }
 
        public function data(Request $request)
