@@ -23,14 +23,15 @@
             <x-card-dashboard title="Standar Mutu" count="{{ $daftar_standar_mutu ?? 0 }}" />
             <x-card-dashboard title="Jumlah Desk Evaluation" count="{{ $poin_desk_evaluation ?? 0 }}" />
             @foreach ($get_desk_evaluation_prodi as $item)
-                <x-card-dashboard title="Desk Evaluation {{ $item->fakultas_prodi }}" count="{{ $item->total_prodi ?? 0 }}" />
+                <x-card-dashboard title="Jumlah Evalusi Diri {{ $item->fakultas_prodi }}"
+                    count="{{ $item->total_prodi ?? 0 }}" />
             @endforeach
         @endrole
 
         @hasanyrole('Kaprodi|Prodi')
-            <x-card-dashboard title="Jumlah Desk Evaluation" count="{{ $prodi_jumlah_desk_evaluation ?? 0 }}" />
-            <x-card-dashboard title="Belum Desk Evaluation" count="{{ $prodi_belum_desk_evaluation ?? 0 }}" />
-            <x-card-dashboard title="Sudah Desk Evaluation" count="{{ $prodi_sudah_desk_evaluation ?? 0 }}" />
+            <x-card-dashboard title="Jumlah Evaluasi" count="{{ $prodi_jumlah_desk_evaluation ?? 0 }}" />
+            <x-card-dashboard title="Belum Evaluasi" count="{{ $prodi_belum_desk_evaluation ?? 0 }}" />
+            <x-card-dashboard title="Sudah Evaluasi" count="{{ $prodi_sudah_desk_evaluation ?? 0 }}" />
         @endhasanyrole
 
         @hasanyrole('Auditor|Audit|LPM')
@@ -151,7 +152,7 @@
                 offsetX: 0,
                 offsetY: 7,
             },
-            labels: ["Sudah Desk Evaluation", "Belum Desk Evaluation"],
+            labels: ["Sudah Evaluasi Diri", "Belum Evaluasi Diri"],
             colors: colors,
             responsive: [{
                 breakpoint: 600,
@@ -211,7 +212,7 @@
                     offsetX: 0,
                     offsetY: 7,
                 },
-                labels: ["Sudah Desk Evaluation", "Belum Desk Evaluation"],
+                labels: ["Sudah Evaluasi Diri", "Belum Evaluasi Diri"],
                 colors: colors,
                 responsive: [{
                     breakpoint: 600,

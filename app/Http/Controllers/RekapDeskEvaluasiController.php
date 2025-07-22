@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\EvaluasiDiri;
 use App\Models\FakultasProdi;
+use App\Models\Jawaban;
 use App\Models\LembagaAkreditasi;
 use App\Models\RekapDeskEvaluasi;
 use App\Models\TahunPeriode;
@@ -11,6 +12,8 @@ use App\Models\TargetNilaiMutu;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Facades\DB;
+
+use function Illuminate\Log\log;
 
 class RekapDeskEvaluasiController extends Controller
 {
@@ -28,54 +31,67 @@ class RekapDeskEvaluasiController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $query = DB::table('fakultas_prodis')
-            ->leftJoin('target_nilai_mutus', 'fakultas_prodis.id', '=', 'target_nilai_mutus.fakultas_prodi_id')
-            ->leftJoin('evaluasi_diris', 'fakultas_prodis.id', '=', 'evaluasi_diris.fakultas_prodi_id')
-            ->leftJoin('rekap_desk_evaluasis', 'fakultas_prodis.id', '=', 'rekap_desk_evaluasis.fakultas_prodi_id')
-            ->select('fakultas_prodis.*', 'target_nilai_mutus.target_nilai_mutu', 'evaluasi_diris.nilai_evaluasi', 'rekap_desk_evaluasis.nilai_desk_evaluasi')
+             $query = DB::table('fakultas_prodis')
+            ->Join('target_nilai_mutus', 'fakultas_prodis.id', '=', 'target_nilai_mutus.fakultas_prodi_id')
+            ->select('fakultas_prodis.*', 'target_nilai_mutus.target_nilai_mutu','target_nilai_mutus.tahun_periode_id', 'target_nilai_mutus.lembaga_akreditasi_id')
             ->when($request->filled('tahun_periode_id'), function ($query) use ($request) {
-                $query->where('tahun_periode_id', $request->tahun_periode_id);
+                $query->where('target_nilai_mutus.tahun_periode_id', $request->tahun_periode_id );
             })
             ->when($request->filled('lembaga_akreditasi_id'), function ($query) use ($request) {
-                $query->where('lembaga_akreditasi_id', $request->lembaga_akreditasi_id);
-            });        
+                $query->where('target_nilai_mutus.lembaga_akreditasi_id', $request->lembaga_akreditasi_id);
+            });              
             return datatables($query)
                 ->addIndexColumn()
-                ->addColumn('action', function ($row) {
-                    $editButton = '';
-                    $deleteButton = '';
-                
-                    // Tambahkan tombol edit jika memiliki izin
-                    if (auth()->user()->can('edit-rekap-desk-evaluasi')) {
-                        $editButton = '
-                            <button onclick="editFunc(`' . $row->id . '`)" class="btn btn-primary btn-flat btn-sm" title="Edit">
-                                <i class="dripicons-document-edit"></i>
-                            </button>
-                        ';
-                    }
-                
-                    // Tambahkan tombol delete jika memiliki izin
-                    if (auth()->user()->can('delete-rekap-desk-evaluasi')) {
-                        $deleteButton = '
-                            <button onclick="deleteFunc(`' . $row->id . '`)" class="btn btn-danger btn-flat btn-sm" title="Delete">
-                                <i class="dripicons-trash"></i>
-                            </button>
-                        ';
-                    }
-                
-                    // Gabungkan semua tombol dalam satu grup
-                    return '
-                        <div class="d-flex gap-1">
-                            ' . $editButton . '
-                            ' . $deleteButton . '
-                        </div>
-                    ';
+                ->addColumn('desk_evaluasi', function ($row) {
+                    return $this->getNilaiDeskEvaluasi($row->id, $row->slug);
                 })
-                ->rawColumns(['action'])
+                ->addColumn('nilai_evaluasi', function ($row) {
+                    return $this->getNialiEvaluasi($row->id);
+                })
                 ->make(true);
         }
         $tahunPeriodes = TahunPeriode::all();
         $lembagaAkreditasis = LembagaAkreditasi::all();
         return view('rekapDeskEvaluasi.index', compact('tahunPeriodes', 'lembagaAkreditasis'));
+    }
+
+    private function getNilaiDeskEvaluasi($id, $slug)
+    {
+            $poin = DB::table('poin_prodi')
+                ->select(
+                    'fakultas_prodi_id',
+                    DB::raw('COUNT(DISTINCT poin_id) as total_poin_id')
+                )
+                ->where('fakultas_prodi_id', $id)
+                ->groupBy('fakultas_prodi_id')
+                ->get();
+
+                
+                $data = DB::table('daftar_temuan_audits')
+                ->join('users', 'daftar_temuan_audits.user_id', '=', 'users.id')
+                ->join('fakultas_prodis', 'users.fakultas_id', '=', 'fakultas_prodis.id')
+                ->where('daftar_temuan_audits.prodi', $slug)
+                ->sum('daftar_temuan_audits.status');
+                log()->info($data);
+                // return $data;
+                return $data / $poin[0]->total_poin_id;
+    }
+
+        private function getNialiEvaluasi($id)
+    {
+
+         $poin = DB::table('poin_prodi')
+                ->select(
+                    'fakultas_prodi_id',
+                    DB::raw('COUNT(DISTINCT poin_id) as total_poin_id')
+                )
+                ->where('fakultas_prodi_id', $id)
+                ->groupBy('fakultas_prodi_id')
+                ->get();
+           $data = Jawaban::join('users', 'jawabans.user_id', '=', 'users.id')
+            ->where('users.fakultas_id', $id)
+            ->sum('jawabans.jawaban');
+
+        return $data / $poin[0]->total_poin_id;
     }
 }

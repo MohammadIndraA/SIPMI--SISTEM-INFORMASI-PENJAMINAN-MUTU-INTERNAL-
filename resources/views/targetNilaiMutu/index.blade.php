@@ -35,7 +35,6 @@
                                 <div class="col-sm-2 col-md-3 px-1">
                                     <select class="form-control select2" name="filter_periode" id="filter_periode"
                                         data-toggle="select2">
-                                        <option value="">Semua Tahun</option>
                                         @foreach ($tahunPeriodes as $item)
                                             <option value="{{ $item->id }}">{{ $item->tahun_periode }}</option>
                                         @endforeach

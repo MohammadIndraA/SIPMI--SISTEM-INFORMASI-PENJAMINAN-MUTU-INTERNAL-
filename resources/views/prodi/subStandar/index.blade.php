@@ -76,28 +76,38 @@
                                             </h5>
                                             <div class="pt-1">
                                                 <div class="form-check py-1">
-                                                    <input type="radio" id="customRadioYa_{{ $item->id }}"
-                                                        name="poin[{{ $item->id }}]" value="ya" required
+                                                    <input type="radio" id="customRadioKurang_{{ $item->id }}"
+                                                        name="poin[{{ $item->id }}]" value="1" required
                                                         class="form-check-input"
-                                                        {{ old('poin.' . $item->id, $jawabans->get($item->id)->jawaban ?? '') == 'ya' ? 'checked' : '' }}>
+                                                        {{ old('poin.' . $item->id, $jawabans->get($item->id)->jawaban ?? '') == '1' ? 'checked' : '' }}>
                                                     <label class="form-check-label"
-                                                        for="customRadioYa_{{ $item->id }}">Ya</label>
+                                                        for="customRadioKurang_{{ $item->id }}">Kurang</label>
                                                 </div>
                                                 <div class="form-check py-1">
-                                                    <input type="radio" id="customRadioTidak_{{ $item->id }}"
-                                                        name="poin[{{ $item->id }}]" value="tidak" required
+                                                    <input type="radio" id="customRadioCukupBaik_{{ $item->id }}"
+                                                        name="poin[{{ $item->id }}]" value="2" required
                                                         class="form-check-input"
-                                                        {{ old('poin.' . $item->id, $jawabans->get($item->id)->jawaban ?? '') == 'tidak' ? 'checked' : '' }}>
+                                                        {{ old('poin.' . $item->id, $jawabans->get($item->id)->jawaban ?? '') == '2' ? 'checked' : '' }}>
                                                     <label class="form-check-label"
-                                                        for="customRadioTidak_{{ $item->id }}">Tidak</label>
+                                                        for="customRadioCukupBaik_{{ $item->id }}">Cukup
+                                                        Baik</label>
                                                 </div>
                                                 <div class="form-check py-1">
-                                                    <input type="radio" id="customRadioSebagian_{{ $item->id }}"
-                                                        name="poin[{{ $item->id }}]" value="sebagian" required
+                                                    <input type="radio" id="customRadioBaik_{{ $item->id }}"
+                                                        name="poin[{{ $item->id }}]" value="3" required
                                                         class="form-check-input"
-                                                        {{ old('poin.' . $item->id, $jawabans->get($item->id)->jawaban ?? '') == 'sebagian' ? 'checked' : '' }}>
+                                                        {{ old('poin.' . $item->id, $jawabans->get($item->id)->jawaban ?? '') == '3' ? 'checked' : '' }}>
                                                     <label class="form-check-label"
-                                                        for="customRadioSebagian_{{ $item->id }}">Sebagian</label>
+                                                        for="customRadioBaik_{{ $item->id }}">Baik</label>
+                                                </div>
+                                                <div class="form-check py-1">
+                                                    <input type="radio" id="customRadioSangat baik{{ $item->id }}"
+                                                        name="poin[{{ $item->id }}]" value="4" required
+                                                        class="form-check-input"
+                                                        {{ old('poin.' . $item->id, $jawabans->get($item->id)->jawaban ?? '') == '4' ? 'checked' : '' }}>
+                                                    <label class="form-check-label"
+                                                        for="customRadioSangat baik{{ $item->id }}">Sangat
+                                                        Baik</label>
                                                 </div>
                                             </div>
 

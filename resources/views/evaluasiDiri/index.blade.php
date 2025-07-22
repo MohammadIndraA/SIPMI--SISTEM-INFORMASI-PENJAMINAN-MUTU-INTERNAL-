@@ -35,7 +35,6 @@
                                 <div class="col-sm-2 col-md-3 px-1">
                                     <select class="form-control select2" name="filter_periode" id="filter_periode"
                                         data-toggle="select2">
-                                        <option value="">Semua Tahun</option>
                                         @foreach ($tahunPeriodes as $item)
                                             <option value="{{ $item->id }}">{{ $item->tahun_periode }}</option>
                                         @endforeach
@@ -63,7 +62,9 @@
                             <thead class="">
                                 <tr>
                                     <th style="width: 10px">#</th>
-                                    <th width="60%">Program Studi</th>
+                                    <th width="40%">Program Studi</th>
+                                    <th>Target Nilai</th>
+                                    <th>Nilai Evalusi</th>
                                     <th>Sudah Menjawab</th>
                                     <th>Belum Menjawab</th>
                                 </tr>
@@ -107,12 +108,26 @@
                         name: 'fakultas_prodi',
                     },
                     {
+                        data: 'target_nilai_mutu',
+                        name: 'target_nilai_mutu',
+                    },
+                    {
+                        data: 'nilai_evaluasi',
+                        name: 'nilai_evaluasi',
+                    },
+                    {
                         data: 'sudah_menjawab',
                         name: 'sudah_menjawab',
+                        render: function(data, type, row) {
+                            return data ?? 0;
+                        }
                     },
                     {
                         data: 'belum_menjawab',
                         name: 'belum_menjawab',
+                        render: function(data, type, row) {
+                            return data ?? 0;
+                        }
                     },
 
                 ]

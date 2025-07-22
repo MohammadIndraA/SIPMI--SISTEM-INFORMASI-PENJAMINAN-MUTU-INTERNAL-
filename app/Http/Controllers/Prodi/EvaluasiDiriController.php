@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Prodi;
 
 use App\Http\Controllers\Controller;
+use App\Models\EvaluasiDiri;
 use App\Models\FakultasProdi;
 use App\Models\Jawaban;
 use App\Models\PengaturanPeriode;
@@ -30,7 +31,7 @@ class EvaluasiDiriController extends Controller
          try {
             $request->validate([
                     'poin' => 'required|array',
-                    'poin.*' => 'in:ya,tidak,sebagian', // Setiap nilai harus salah satu dari ini
+                    'poin.*' => 'in:1,2,3,4', // Setiap nilai harus salah satu dari ini
                 ]);
             // Data sudah tervalidasi melalui LembagaAkreditasiRequest
              foreach ($request->poin as $poinId => $jawaban) {
@@ -45,6 +46,19 @@ class EvaluasiDiriController extends Controller
                         'catatan' => $request->catatan[$poinId] ?? null,
                     ]
                 );
+
+                // EvaluasiDiri::updateOrCreate(
+                //     [
+                //         'lembaga_akreditasi_id' => auth()->id(),
+                //         'fakultas_prodi_id' => $poinId,
+                //     ],
+                //     [
+                //         'target_nilai_mutu' => $request->sub_standar_id,
+                //         'nilai_evaluasi' => $jawaban,
+                //         'sudah_menjawab' => $jawaban,
+                //         'belum_menjawab' => $jawaban,
+                //     ]
+                // );
             }
             return response()->json([
                 "status" => true,

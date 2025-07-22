@@ -87,14 +87,14 @@
             <li class="side-nav-title side-nav-item">Manajemen Standar Mutu</li>
         @endhasanyrole
 
-        @can('view-daftar-nilai-mutu')
+        {{-- @can('view-daftar-nilai-mutu')
             <li class="side-nav-item">
                 <a href="/daftar-nilai-mutus" class="side-nav-link">
                     <i class="uil-bill"></i>
                     <span>Daftar Nilai Mutu </span>
                 </a>
             </li>
-        @endcan
+        @endcan --}}
 
         @can('view-daftar-standar-mutu')
             <li class="side-nav-item">
@@ -149,7 +149,7 @@
                 @can('view-rekap-desk-evaluasi')
                     <li>
                         <a
-                            href=" {{ auth()->user()->hasRole('Admin') ? route('rekap-desk-evaluasi.index') : route('prodi.rekap-desk-evaluasi.index') }}">{{ auth()->user()->hasRole('Admin') ? 'Rekap' : 'Hasil' }}
+                            href=" {{ auth()->user()->hasRole('Admin') ? route('admin-rekap-desk.index') : route('prodi.rekap-desk-evaluasi.index') }}">{{ auth()->user()->hasRole('Admin') ? 'Rekap' : 'Hasil' }}
                             Desk Evaluasi</a>
                     </li>
                 @endcan

@@ -81,7 +81,7 @@ class RekapDaftarTemuanController extends Controller
          try {
             $request->validate([
                     'status' => 'required|array',
-                    'status.*' => 'in:Terverifikasi,Membutuhkan Perbaikan,Tidak Terbukti', // Setiap nilai harus salah satu dari ini
+                    'status.*' => 'in:1,2,3,4', // Setiap nilai harus salah satu dari ini
                 ]);
             // Data sudah tervalidasi melalui LembagaAkreditasiRequest
     

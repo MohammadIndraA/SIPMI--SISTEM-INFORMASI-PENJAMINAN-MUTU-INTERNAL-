@@ -35,7 +35,6 @@
                                 <div class="col-sm-2 col-md-3 px-1">
                                     <select class="form-control select2" name="filter_periode" id="filter_periode"
                                         data-toggle="select2">
-                                        <option value="">Semua Tahun</option>
                                         @foreach ($tahunPeriodes as $item)
                                             <option value="{{ $item->id }}">{{ $item->tahun_periode }}</option>
                                         @endforeach
@@ -58,7 +57,7 @@
                             </div>
                         </div>
                     </div>
-                    @if ($tahunPeriodes->count() > 0)
+                    @if ($tahunPeriodes->count() < 0)
                         <div class="alert alert-warning" role="alert">
                             Fitur Dalam Tahap Pengembangan <a href="#" class="alert-link">Terimakasih</a>
                         </div>
@@ -99,7 +98,7 @@
                 processing: true,
                 serverSide: true,
                 ajax: {
-                    url: "{{ route('evaluasi-diri.index') }}",
+                    url: "{{ route('admin-rekap-desk.index') }}",
                     data: function(d) {
                         d.tahun_periode_id = $('#filter_periode').val();
                         d.lembaga_akreditasi_id = $('#filter_lembaga').val();
@@ -129,8 +128,8 @@
                         }
                     },
                     {
-                        data: 'nilai_desk_evaluasi',
-                        name: 'nilai_desk_evaluasi',
+                        data: 'desk_evaluasi',
+                        name: 'desk_evaluasi',
                         render: function(data, type, row) {
                             return data ?? 0;
                         }

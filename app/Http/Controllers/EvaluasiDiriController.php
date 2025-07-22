@@ -38,7 +38,7 @@ class EvaluasiDiriController extends Controller
             ->whereIn('jawabans.poin_id', $poin_ids)
             ->where('users.fakultas_id', $fakultas_prodi_id)
             ->count();
-        log()->info($data);
+        // log()->info($data);
         return $data;
     }
 
@@ -50,12 +50,12 @@ class EvaluasiDiriController extends Controller
             $query = DB::table('fakultas_prodis')
             ->leftJoin('target_nilai_mutus', 'fakultas_prodis.id', '=', 'target_nilai_mutus.fakultas_prodi_id')
             ->leftJoin('evaluasi_diris', 'fakultas_prodis.id', '=', 'evaluasi_diris.fakultas_prodi_id')
-            ->select('fakultas_prodis.*', 'target_nilai_mutus.target_nilai_mutu', 'evaluasi_diris.nilai_evaluasi', 'evaluasi_diris.sudah_menjawab', 'evaluasi_diris.belum_menjawab')
+            ->select('fakultas_prodis.*', 'target_nilai_mutus.target_nilai_mutu', 'evaluasi_diris.nilai_evaluasi', 'evaluasi_diris.sudah_menjawab', 'evaluasi_diris.belum_menjawab', 'target_nilai_mutus.tahun_periode_id', 'target_nilai_mutus.lembaga_akreditasi_id')
                 ->when($request->filled('tahun_periode_id'), function ($query) use ($request) {
-                $query->where('tahun_periode_id', $request->tahun_periode_id);
+                $query->where('target_nilai_mutus.tahun_periode_id', $request->tahun_periode_id);
             })
             ->when($request->filled('lembaga_akreditasi_id'), function ($query) use ($request) {
-                $query->where('lembaga_akreditasi_id', $request->lembaga_akreditasi_id);
+                $query->where('target_nilai_mutus.lembaga_akreditasi_id', $request->lembaga_akreditasi_id);
             });        
             return datatables($query)
                 ->addIndexColumn()
@@ -68,11 +68,32 @@ class EvaluasiDiriController extends Controller
                         $sudah = $this->getJumlahSudahMenjawab($row->id);
                         return max(0, $total - $sudah);
                     })
+                ->addColumn('nilai_evaluasi', function ($row) {
+                    return $this->getNialiEvaluasi($row->id);
+                })
                 ->rawColumns(['sudah_menjawab', 'belum_menjawab'])
                 ->make(true);
         }
         $tahunPeriodes = TahunPeriode::all();
         $lembagaAkreditasis = LembagaAkreditasi::all();
         return view('evaluasiDiri.index', compact('tahunPeriodes', 'lembagaAkreditasis'));
+    }
+
+    private function getNialiEvaluasi($id)
+    {
+
+         $poin = DB::table('poin_prodi')
+                ->select(
+                    'fakultas_prodi_id',
+                    DB::raw('COUNT(DISTINCT poin_id) as total_poin_id')
+                )
+                ->where('fakultas_prodi_id', $id)
+                ->groupBy('fakultas_prodi_id')
+                ->get();
+           $data = Jawaban::join('users', 'jawabans.user_id', '=', 'users.id')
+            ->where('users.fakultas_id', $id)
+            ->sum('jawabans.jawaban');
+
+        return $data / $poin[0]->total_poin_id;
     }
 }

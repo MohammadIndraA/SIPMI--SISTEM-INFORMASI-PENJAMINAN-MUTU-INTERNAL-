@@ -78,28 +78,40 @@
                                             </h5>
                                             <div class="pt-1">
                                                 <div class="form-check py-1">
-                                                    <input type="radio" id="customRadioYa_{{ $item->id }}"
-                                                        name="poin[{{ $item->id }}]" value="ya" disabled
+                                                    <input type="radio" id="customRadioKurang_{{ $item->id }}"
+                                                        name="poin[{{ $item->id }}]" value="1" disabled
                                                         class="form-check-input"
-                                                        {{ old('poin.' . $item->id, $jawabans->get($item->id)->jawaban ?? '') == 'ya' ? 'checked' : '' }}>
+                                                        {{ old('poin.' . $item->id, $jawabans->get($item->id)->jawaban ?? '') == '1' ? 'checked' : '' }}>
                                                     <label class="form-check-label"
-                                                        for="customRadioYa_{{ $item->id }}">Ya</label>
+                                                        for="customRadioKurang_{{ $item->id }}">Kurang
+                                                    </label>
                                                 </div>
                                                 <div class="form-check py-1">
-                                                    <input type="radio" id="customRadioTidak_{{ $item->id }}"
-                                                        name="poin[{{ $item->id }}]" value="tidak" disabled
+                                                    <input type="radio" id="customRadioCukupBaik_{{ $item->id }}"
+                                                        name="poin[{{ $item->id }}]" value="2" disabled
                                                         class="form-check-input"
-                                                        {{ old('poin.' . $item->id, $jawabans->get($item->id)->jawaban ?? '') == 'tidak' ? 'checked' : '' }}>
+                                                        {{ old('poin.' . $item->id, $jawabans->get($item->id)->jawaban ?? '') == '2' ? 'checked' : '' }}>
                                                     <label class="form-check-label"
-                                                        for="customRadioTidak_{{ $item->id }}">Tidak</label>
+                                                        for="customRadioCukupBaik_{{ $item->id }}">Cukup
+                                                        Baik </label>
                                                 </div>
                                                 <div class="form-check py-1">
-                                                    <input type="radio" id="customRadioSebagian_{{ $item->id }}"
-                                                        name="poin[{{ $item->id }}]" value="sebagian" disabled
+                                                    <input type="radio" id="customRadioBaik_{{ $item->id }}"
+                                                        name="poin[{{ $item->id }}]" value="3" disabled
                                                         class="form-check-input"
-                                                        {{ old('poin.' . $item->id, $jawabans->get($item->id)->jawaban ?? '') == 'sebagian' ? 'checked' : '' }}>
+                                                        {{ old('poin.' . $item->id, $jawabans->get($item->id)->jawaban ?? '') == '3' ? 'checked' : '' }}>
                                                     <label class="form-check-label"
-                                                        for="customRadioSebagian_{{ $item->id }}">Sebagian</label>
+                                                        for="customRadioBaik_{{ $item->id }}">Baik
+                                                    </label>
+                                                </div>
+                                                <div class="form-check py-1">
+                                                    <input type="radio" id="customRadioSangat baik{{ $item->id }}"
+                                                        name="poin[{{ $item->id }}]" value="4" disabled
+                                                        class="form-check-input"
+                                                        {{ old('poin.' . $item->id, $jawabans->get($item->id)->jawaban ?? '') == '4' ? 'checked' : '' }}>
+                                                    <label class="form-check-label"
+                                                        for="customRadioSangat baik{{ $item->id }}">Sangat
+                                                        Baik </label>
                                                 </div>
                                             </div>
 
@@ -140,37 +152,41 @@
                                             </div>
 
                                             <hr>
-                                            <span class="mb-1"><strong>PENILAIAN</strong></span>
+                                            <span class="mb-1"><strong>Hasil Desk Evaluasi :</strong></span>
                                             @if ($jawaban_auditor->count() > 0)
                                                 <div class="row mb-1">
                                                     <label for="Status" class="col-2 col-form-label"><b>Status</b>
                                                     </label>
                                                     <div class="col-10">
                                                         <div class="form-check form-check-inline">
-                                                            <label class="form-check-label ml-5 my-1" for="Terverifikasi">
+                                                            <label class="form-check-label ml-5 my-1" for="Kurang">
+                                                                <input type="radio" disabled
+                                                                    name="status[{{ $item->id }}]"
+                                                                    class="form-check-input form-check-lg" id="Kurang "
+                                                                    {{ old('status.' . $item->id, $jawaban_auditor->get($item->id)->status ?? '') == '1' ? 'checked' : '' }}
+                                                                    value="1">
+                                                                Kurang </label>
+                                                            <label class="form-check-label mx-4 my-1" for="cukup_baik">
                                                                 <input type="radio" disabled
                                                                     name="status[{{ $item->id }}]"
                                                                     class="form-check-input form-check-lg"
-                                                                    id="Terverifikasi "
-                                                                    {{ old('status.' . $item->id, $jawaban_auditor->get($item->id)->status ?? '') == 'Terverifikasi' ? 'checked' : '' }}
-                                                                    value="Terverifikasi">
-                                                                Terverifikasi </label>
-                                                            <label class="form-check-label mx-4 my-1"
-                                                                for="memburuhkan_perbaia">
+                                                                    {{ old('status.' . $item->id, $jawaban_auditor->get($item->id)->status ?? '') == '2' ? 'checked' : '' }}
+                                                                    id="cukup_baik " value="2">
+                                                                Cukup Baik </label>
+                                                            <label class="form-check-label mx-2 my-1" for="baik">
                                                                 <input type="radio" disabled
                                                                     name="status[{{ $item->id }}]"
                                                                     class="form-check-input form-check-lg"
-                                                                    {{ old('status.' . $item->id, $jawaban_auditor->get($item->id)->status ?? '') == 'Membutuhkan Perbaikan' ? 'checked' : '' }}
-                                                                    id="memburuhkan_perbaia " value="Membutuhkan Perbaikan">
-                                                                Membutuhkan Perbaikan </label>
-                                                            <label class="form-check-label mx-2 my-1"
-                                                                for="tidak_terbukti">
+                                                                    {{ old('status.' . $item->id, $jawaban_auditor->get($item->id)->status ?? '') == '3' ? 'checked' : '' }}
+                                                                    id="baik " value="3">
+                                                                Baik </label>
+                                                            <label class="form-check-label mx-2 my-1" for="sangat_baik">
                                                                 <input type="radio" disabled
                                                                     name="status[{{ $item->id }}]"
                                                                     class="form-check-input form-check-lg"
-                                                                    {{ old('status.' . $item->id, $jawaban_auditor->get($item->id)->status ?? '') == 'Tidak Terbukti' ? 'checked' : '' }}
-                                                                    id="tidak_terbukti " value="Tidak Terbukti">
-                                                                Tidak Terbukti </label>
+                                                                    {{ old('status.' . $item->id, $jawaban_auditor->get($item->id)->status ?? '') == '4' ? 'checked' : '' }}
+                                                                    id="sangat_baik " value="4">
+                                                                Sangat Baik </label>
 
                                                         </div>
                                                     </div>

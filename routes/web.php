@@ -142,7 +142,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/manajemen-auditor-delete', [ManajemenAuditorController::class, 'destroy'])->name('manajemen-auditor.delete');
 
     // Rekap Desk Evaluasi
-    Route::get('/rekap-desk-evaluasis', [RekapDeskEvaluasiController::class, 'index'])->name('rekap-desk-evaluasi.index');
+    Route::get('/admin-rekap-desk', [RekapDeskEvaluasiController::class, 'index'])->name('admin-rekap-desk.index');
     
     // Daftar Standar Mutu
     // Route::get('/daftar-standar-mutus', [DaftarStandarMutuController::class, 'index'])->name('daftar-standar-mutu.index');
