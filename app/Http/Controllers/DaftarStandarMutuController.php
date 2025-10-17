@@ -28,7 +28,7 @@ class DaftarStandarMutuController extends Controller
     {
         if ($request->ajax()) {
         $daftarStandarMutu = DaftarStandarMutu::with('daftar_standars.daftar_sub_standars.poins')
-            ->orderBy('daftar_standar_mutus.id', 'desc')
+            ->orderBy('daftar_standar_mutus.id', 'asc')
             ->when($request->filled('tahun_periode_id'), function ($query) use ($request) {
                 $query->where('tahun_periode_id', $request->tahun_periode_id);
             })
@@ -59,7 +59,7 @@ class DaftarStandarMutuController extends Controller
                                         foreach ($daftar_sub_standar->poins as $poin) {
                                             $data .= '<div class="inline col-12" style="display: flex; align-items: center;">'; // Buka <div> untuk setiap poin
                                             $data .= '<li class="col-11"><p class="">' . $poin->nama_poin . '</p><hr></li>';
-                                            $data .= '<div class="col-1"><a onclick="addIndikator(' . $poin->id . ')" class="" style="cursor: pointer;">indikator</a><hr></div>';
+                                            // $data .= '<div class="col-1"><a onclick="addIndikator(' . $poin->id . ')" class="" style="cursor: pointer;">indikator</a><hr></div>';
                                             $data .= '</div>'; // Tutup <div> untuk setiap poin
                                         }
                                         $data .= '</ul>'; // Tutup <ul> di sini

@@ -8,10 +8,10 @@
                     <ol class="breadcrumb m-0">
                         <li class="breadcrumb-item"><a href="javascript: void(0);">Page</a></li>
                         <li class="breadcrumb-item"><a href="javascript: void(0);">Table</a></li>
-                        <li class="breadcrumb-item active">Fakultas/Prodi</li>
+                        <li class="breadcrumb-item active">Prodi</li>
                     </ol>
                 </div>
-                <h4 class="page-title">Fakultas/Prodi</h4>
+                <h4 class="page-title">Prodi</h4>
             </div>
         </div>
     </div>
@@ -25,7 +25,7 @@
                                 <a href="#" class="btn btn-primary mb-2"
                                     onClick="addUser('{{ route('fakultas-prodi.store') }}')"><i
                                         class="mdi mdi-plus-circle me-2"></i>
-                                    Add Fakultas/Prodi</a>
+                                    Add Prodi</a>
                             </div>
                         @endcan
                     </div>
@@ -35,7 +35,7 @@
                             <thead class="">
                                 <tr>
                                     <th style="width: 10px">#</th>
-                                    <th>Nama Fakultas/Prodi</th>
+                                    <th>Nama Prodi</th>
                                     <th style="width: 20px" class="text-center"><i class="dripicons-gear"></i></th>
                                     {{-- <th style="width: 85px;">Action</th> --}}
                                 </tr>
@@ -50,7 +50,7 @@
     <x-modal>
         <div class="modal-body">
             <div class="row mb-1">
-                <label for="fakultas_prodi" class="col-5 col-form-label">Nama Fakultas/Prodi <sop class="text-danger">*
+                <label for="fakultas_prodi" class="col-5 col-form-label">Nama Prodi <sop class="text-danger">*
                     </sop>
                 </label>
                 <div class="col-7">

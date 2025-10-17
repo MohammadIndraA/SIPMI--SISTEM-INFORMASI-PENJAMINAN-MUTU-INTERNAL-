@@ -46,7 +46,7 @@ class ManajemenDokumenRequest extends FormRequest
             'file_dokumen.required' => 'File Dokumen harus diisi',
             'file_dokumen.file' => 'File Dokumen harus berupa file',
             'file_dokumen.mimes' => 'File Dokumen harus berupa PDF',
-            'file_dokumen.max' => 'File Dokumen maksimal 5MB',
+            'file_dokumen.max' => 'File Dokumen PDF maksimal 5MB',
         ];
     }
 }

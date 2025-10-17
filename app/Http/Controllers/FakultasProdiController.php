@@ -67,7 +67,7 @@ class FakultasProdiController extends Controller
         try {
             // Data sudah tervalidasi melalui Fakultas ProdiRequest
             $data = $request->validated();
-            $data['slug'] = Str::slug($request->fakultas_prodi, '-');
+            $data['slug'] = Str::slug($request->fakultas_prodi);
            $fakultasProdi = FakultasProdi::create($data);
             return response()->json([
                 "status" => true,

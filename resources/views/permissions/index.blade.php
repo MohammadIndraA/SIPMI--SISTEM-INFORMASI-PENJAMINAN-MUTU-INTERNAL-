@@ -50,10 +50,10 @@
     <x-modal>
         <div class="modal-body">
             <div class="row mb-3">
-                <label for="name" class="col-3 col-form-label">Name <sop class="text-danger">*</sop> </label>
+                <label for="name" class="col-3 col-form-label">Nama <sop class="text-danger">*</sop> </label>
                 <div class="col-9">
                     <input type="text" class="form-control" name="name" id="name" value="{{ old('name') }}"
-                        placeholder="Enter name">
+                        placeholder="Nama Permission">
                 </div>
             </div>
         </div>

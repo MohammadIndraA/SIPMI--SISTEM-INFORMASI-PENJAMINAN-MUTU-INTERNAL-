@@ -76,7 +76,7 @@ class ManajemenDokumenController extends Controller
             // Data sudah tervalidasi melalui ManajemenDokumenRequest
             $data = $request->validated();
             if ($request->hasFile('file_dokumen')) {
-                $data['file_dokumen'] = uploadDokumen('dokumen/kategori', $request->file('file_dokumen'));
+                $data['file_dokumen'] = uploadDokumenGoogleDrive('dokumen/kategori', $request->file('file_dokumen'));
             }
             $manajemenDokumen = ManajemenDokumen::create($data);
             return response()->json([

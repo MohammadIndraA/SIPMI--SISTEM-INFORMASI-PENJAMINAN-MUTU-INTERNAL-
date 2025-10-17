@@ -22,9 +22,17 @@ class DaftarStandarRequest extends FormRequest
      */
     public function rules(Request $request): array
     {
+
+         // Sanitasi input sebelum validasi
+    $request->merge([
+        'nama_standar' => strip_tags($request->nama_standar),
+        'deskripsi' => strip_tags($request->deskripsi),
+    ]);
+
         return [
             'nama_standar' => [
                 'required',
+                'regex:/^[^<>]*$/',
                 Rule::unique('daftar_standars', 'nama_standar')->ignore($request->id),
             ],
             'deskripsi' => 'nullable|string',

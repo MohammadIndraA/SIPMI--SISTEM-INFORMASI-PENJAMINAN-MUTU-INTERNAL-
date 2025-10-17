@@ -11,6 +11,7 @@ class FakultasProdi extends Model
     protected $fillable = [
         'fakultas_prodi',
         'status',
+        'slug'
     ];
     
     public function poins()

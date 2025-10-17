@@ -94,6 +94,6 @@ class EvaluasiDiriController extends Controller
             ->where('users.fakultas_id', $id)
             ->sum('jawabans.jawaban');
 
-        return $data / $poin[0]->total_poin_id;
+        return round($data / $poin[0]->total_poin_id, 2);
     }
 }

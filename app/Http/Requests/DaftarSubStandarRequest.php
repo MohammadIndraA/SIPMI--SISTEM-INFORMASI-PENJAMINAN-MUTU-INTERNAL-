@@ -22,9 +22,16 @@ class DaftarSubStandarRequest extends FormRequest
      */
     public function rules(Request $request): array
     {
+
+         $request->merge([
+        'nama_sub_standar' => strip_tags($request->nama_sub_standar),
+        'deskripsi' => strip_tags($request->deskripsi),
+    ]);
+
         return [
             'nama_sub_standar' => [
                 'required',
+                'regex:/^[^<>]*$/',
                 Rule::unique('daftar_sub_standars', 'nama_sub_standar')->ignore($request->id),
             ],
             'deskripsi' => 'nullable|string',

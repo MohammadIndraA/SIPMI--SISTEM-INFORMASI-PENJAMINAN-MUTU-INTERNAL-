@@ -22,7 +22,7 @@ class StandarMutuController extends Controller
     {
         if ($request->ajax()) {
         $daftarStandarMutu = DaftarStandarMutu::with('daftar_standars.daftar_sub_standars.poins')
-            ->orderBy('daftar_standar_mutus.id', 'desc')
+            ->orderBy('daftar_standar_mutus.id', 'asc')
             ->when($request->filled('tahun_periode_id'), function ($query) use ($request) {
                 $query->where('tahun_periode_id', $request->tahun_periode_id);
             })

@@ -52,16 +52,16 @@
     <x-modal>
         <div class="modal-body">
             <div class="mb-2">
-                <label for="name" class="form-label">Name</label>
+                <label for="name" class="form-label">Nama</label>
                 <input type="hidden" name="id" id="id">
                 <input type="text" class="form-control" id="name" name="name" aria-describedby="emailHelp"
-                    placeholder="Enter email" value="{{ old('name') }}">
+                    placeholder="Masukan Nama" value="{{ old('name') }}">
             </div>
 
             <div class="mb-2">
-                <label for="email" class="form-label">Email address</label>
+                <label for="email" class="form-label">Alamat Email </label>
                 <input type="email" class="form-control" name="email" id="email" aria-describedby="emailHelp"
-                    placeholder="Enter email" value="{{ old('email') }}">
+                    placeholder="Masukan Alamat Email" value="{{ old('email') }}">
             </div>
 
             <!-- Single Select Role-->
@@ -77,7 +77,7 @@
 
             <!-- Single Select Prodi-->
             <div class="mb-2">
-                <label for="fakultas_id" class="form-label">Prodi / Fakultas</label>
+                <label for="fakultas_id" class="form-label">Prodi</label>
                 <select class="form-select" id="fakultas_id" name="fakultas_id">
                     <option disabled selected>Open this select menu</option>
                     @foreach ($prodis as $item)

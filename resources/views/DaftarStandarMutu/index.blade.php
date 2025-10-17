@@ -362,6 +362,7 @@
                     $('#tahun_periode_id').val(res.data.tahun_periode_id);
                     $('#deskripsi').val(res.data.deskripsi);
                     $('#myForm').find('.summernote').summernote('code', res.data.nama_standar_mutu);
+
                 },
                 error: function(data) {
                     console.log(data.errors);
@@ -620,6 +621,7 @@
                     alertNotify('success', data.message);
                     $(".standar").addClass("d-none").fadeOut();
                     $(".sub-standar").addClass("d-none").fadeOut();
+                    $('#data-table').reload();
                 },
                 error: function(data) {
                     $("#btnSave").html("Simpan");

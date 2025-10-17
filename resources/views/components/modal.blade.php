@@ -12,7 +12,7 @@
                     {{ $slot }}
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" id="btnClose"
-                            data-bs-dismiss="modal">Close</button>
+                            data-bs-dismiss="modal">Keluar</button>
                         <button type="submit" id="btnSave" class="btn btn-primary">Simpan</button>
                     </div> <!-- end modal footer -->
                 </form>

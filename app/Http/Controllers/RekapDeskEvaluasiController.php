@@ -74,7 +74,7 @@ class RekapDeskEvaluasiController extends Controller
                 ->sum('daftar_temuan_audits.status');
                 log()->info($data);
                 // return $data;
-                return $data / $poin[0]->total_poin_id;
+                return round($data / $poin[0]->total_poin_id, 2);
     }
 
         private function getNialiEvaluasi($id)
@@ -92,6 +92,6 @@ class RekapDeskEvaluasiController extends Controller
             ->where('users.fakultas_id', $id)
             ->sum('jawabans.jawaban');
 
-        return $data / $poin[0]->total_poin_id;
+        return round($data / $poin[0]->total_poin_id, 2);
     }
 }

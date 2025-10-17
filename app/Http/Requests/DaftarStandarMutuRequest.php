@@ -22,11 +22,19 @@ class DaftarStandarMutuRequest extends FormRequest
      */
     public function rules(Request $request): array
     {
+
+         // Sanitasi input sebelum validasi
+    $request->merge([
+        'nama_standar_mutu' => strip_tags($request->nama_standar_mutu),
+        'deskripsi' => strip_tags($request->deskripsi),
+    ]);
+
         return [
             'tahun_periode_id' => ['required', 'numeric', 'max:10'],
             'lembaga_akreditasi_id' => ['required', 'numeric', 'max:10'],
             'nama_standar_mutu' => [
                 'required',
+                 'regex:/^[^<>]*$/', 
                 Rule::unique('daftar_standar_mutus', 'nama_standar_mutu')->ignore($request->id),
             ],
             'deskripsi' => 'nullable|string',
